@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="302.0" prefWidth="385.0" stylesheets="@../styles/styles.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.olimpiadas.controller.ParticipacionController">
+   <children>
+      <HBox alignment="CENTER" prefHeight="88.0" prefWidth="600.0">
+         <children>
+            <Label text="PARTICIPACION">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="386.0" spacing="50.0">
+         <children>
+            <Label text="Deportista" />
+            <ComboBox fx:id="cbDeportista" prefWidth="150.0" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="55.0" prefWidth="386.0" spacing="50.0">
+         <children>
+            <Label text="Evento" />
+            <ComboBox fx:id="cbEvento" prefWidth="150.0" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="386.0" spacing="50.0">
+         <children>
+            <Label text="Equipo" />
+            <ComboBox fx:id="cbEquipo" prefWidth="150.0" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="74.0" prefWidth="600.0" spacing="50.0">
+         <children>
+            <Label text="Edad" />
+            <TextField fx:id="tfEdad" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="74.0" prefWidth="600.0" spacing="50.0">
+         <children>
+            <Label text="Medalla" />
+            <TextField fx:id="tfMedalla" />
+         </children>
+      </HBox>
+      <BorderPane prefHeight="61.0" prefWidth="386.0">
+         <left>
+            <Button mnemonicParsing="false" onAction="#guardar" text="Guardar" BorderPane.alignment="CENTER" />
+         </left>
+         <right>
+            <Button mnemonicParsing="false" onAction="#cancelar" text="Cancelar" BorderPane.alignment="CENTER" />
+         </right>
+         <padding>
+            <Insets left="50.0" right="50.0" />
+         </padding>
+      </BorderPane>
+   </children>
+</VBox>
