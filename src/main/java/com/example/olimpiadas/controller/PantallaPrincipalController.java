@@ -1,4 +1,4 @@
-package com.example.ejerciciom;
+package com.example.olimpiadas.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -6,7 +6,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
-public class ListaDeAeropuertosController {
+public class PantallaPrincipalController {
 
     @FXML
     private MenuItem miAniadirDeporte;
@@ -63,7 +63,7 @@ public class ListaDeAeropuertosController {
     private MenuItem miEditarParticipacion;
 
     @FXML
-    private TableView<?> tabla;
+    private TableView tabla;
 
     @FXML
     private TextField tfNombre;
