@@ -1,0 +1,55 @@
+/* estilos.css */
+
+/* Aplicar un fondo claro a todo el GridPane */
+.grid-pane {
+    -fx-background-color: #f4f4f4;
+    -fx-padding: 20px;
+    -fx-border-color: #ddd;
+    -fx-border-width: 1px;
+}
+
+/* Título principal */
+.label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+    -fx-font-family: "Arial";
+}
+
+/* Estilo de título de la interfaz */
+.label[fx:id="titleLabel"] {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4a90e2;
+}
+
+/* Cuadros de texto */
+.text-field {
+    -fx-padding: 5px;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-background-color: #fff;
+}
+
+/* Botones */
+.button {
+    -fx-background-color: #4a90e2;
+    -fx-text-fill: #fff;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 15px;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+}
+
+.button:hover {
+    -fx-background-color: #357ABD;
+}
+
+/* RadioButton */
+.radio-button {
+    -fx-text-fill: #333;
+}
+
+.root {
+    -fx-background-color: #e0e0e0;  /* Un gris claro */
+}
