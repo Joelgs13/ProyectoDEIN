@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="962.0" stylesheets="@../../../../../../../../EjercicioM/src/main/resources/estilos/styles.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ejerciciom.ListaDeAeropuertosController">
+   <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="Deporte">
+            <items>
+              <MenuItem fx:id="miAniadirDeporte" mnemonicParsing="false" onAction="#aniadirDeporte" text="Añadir" />
+                  <MenuItem fx:id="miEditarDeporte" mnemonicParsing="false" onAction="#editarDeporte" text="Editar" />
+                  <MenuItem fx:id="miBorrarDeporte" mnemonicParsing="false" onAction="#borrarDeporte" text="Borrar" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="Deportista">
+               <items>
+                  <MenuItem fx:id="miAniadirDeportista" mnemonicParsing="false" onAction="#aniadirDeportista" text="Añadir" />
+                  <MenuItem fx:id="miEditarDeportista" mnemonicParsing="false" onAction="#editarDeportista" text="Editar" />
+                  <MenuItem fx:id="miBorrarDeportista" mnemonicParsing="false" onAction="#borrarDeportista" text="Borrar" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Equipo">
+               <items>
+                  <MenuItem fx:id="miAniadirEquipo" mnemonicParsing="false" onAction="#aniadirEquipo" text="Añadir" />
+                  <MenuItem fx:id="miEditarEquipo" mnemonicParsing="false" onAction="#editarEquipo" text="Editar" />
+                  <MenuItem fx:id="miBorrarEquipo" mnemonicParsing="false" onAction="#borrarEquipo" text="Borrar" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Evento">
+               <items>
+                  <MenuItem fx:id="miAniadirEvento" mnemonicParsing="false" onAction="#aniadirEvento" text="Añadir" />
+                  <MenuItem fx:id="miEditarEvento" mnemonicParsing="false" onAction="#editarEvento" text="Editar" />
+                  <MenuItem fx:id="miBorrarEvento" mnemonicParsing="false" onAction="#borrarEvento" text="Borrar" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Olimpiada">
+               <items>
+                  <MenuItem fx:id="miAniadirOlimpiada" mnemonicParsing="false" onAction="#aniadirOlimpiada" text="Añadir" />
+                  <MenuItem fx:id="miEditarOlimpiada" mnemonicParsing="false" onAction="#editarOlimpiada" text="Editar" />
+                  <MenuItem fx:id="miBorrarOlimpiada" mnemonicParsing="false" onAction="#borrarOlimpiada" text="Borrar" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Participacion">
+               <items>
+                  <MenuItem fx:id="miAniadirParticipacion" mnemonicParsing="false" onAction="#aniadirParticipacion" text="Añadir" />
+                  <MenuItem fx:id="miEditarParticipacion" mnemonicParsing="false" onAction="#editarParticipacion" text="Editar" />
+                  <MenuItem fx:id="miBorrarParticipacion" mnemonicParsing="false" onAction="#borrarParticipacion" text="Borrar" />
+               </items>
+            </Menu>
+        </menus>
+      </MenuBar>
+      <FlowPane alignment="CENTER" prefHeight="39.0" prefWidth="962.0">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" text="OLIMPIADAS">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+         <VBox.margin>
+            <Insets top="50.0" />
+         </VBox.margin>
+      </FlowPane>
+      <HBox alignment="CENTER" prefHeight="43.0" prefWidth="962.0" spacing="450.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Tabla:" />
+                  <ComboBox onAction="#cambiarDeTabla" prefWidth="150.0" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="30.0" prefWidth="216.0">
+               <children>
+                  <Label text="Nombre:" />
+                  <TextField fx:id="tfNombre" onAction="#filtrar" />
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="330.0" prefWidth="962.0">
+         <children>
+            <ImageView fitHeight="179.0" fitWidth="259.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/logoOlimpiada.png" />
+               </image>
+            </ImageView>
+         </children>
+      </HBox>
+      <StackPane prefHeight="501.0" prefWidth="962.0">
+         <children>
+            <TableView fx:id="tabla" prefHeight="434.0" prefWidth="962.0">
+               <contextMenu>
+                  <ContextMenu>
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#editarAeropuerto" text="Editar" />
+                        <MenuItem mnemonicParsing="false" onAction="#borrarAeropuerto" text="Borrar" />
+                    </items>
+                  </ContextMenu>
+               </contextMenu>
+            </TableView>
+         </children>
+      </StackPane>
+   </children>
+</VBox>
