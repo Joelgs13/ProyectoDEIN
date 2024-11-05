@@ -1,4 +1,4 @@
-package com.example.olimpiadas.Model;
+package com.example.olimpiadas.model;
 
 // Clase Olimpiada
 public class Olimpiada {

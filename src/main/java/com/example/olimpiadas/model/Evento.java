@@ -1,4 +1,4 @@
-package com.example.olimpiadas.Model;
+package com.example.olimpiadas.model;
 
 // Clase Evento
 public class Evento {
