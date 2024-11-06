@@ -168,11 +168,6 @@ public class PantallaPrincipalController {
     }
 
     @FXML
-    void borrarAeropuerto(ActionEvent event) {
-
-    }
-
-    @FXML
     void borrarDeporte(ActionEvent event) {
 
     }
@@ -199,11 +194,6 @@ public class PantallaPrincipalController {
 
     @FXML
     void borrarParticipacion(ActionEvent event) {
-
-    }
-
-    @FXML
-    void editarAeropuerto(ActionEvent event) {
 
     }
 

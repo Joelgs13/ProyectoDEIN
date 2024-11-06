@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -104,16 +103,7 @@
       </HBox>
       <StackPane prefHeight="501.0" prefWidth="962.0">
          <children>
-            <TableView fx:id="tabla" prefHeight="434.0" prefWidth="962.0">
-               <contextMenu>
-                  <ContextMenu>
-                    <items>
-                      <MenuItem mnemonicParsing="false" onAction="#editarAeropuerto" text="Editar" />
-                        <MenuItem mnemonicParsing="false" onAction="#borrarAeropuerto" text="Borrar" />
-                    </items>
-                  </ContextMenu>
-               </contextMenu>
-            </TableView>
+            <TableView fx:id="tabla" prefHeight="434.0" prefWidth="962.0" />
          </children>
       </StackPane>
    </children>
