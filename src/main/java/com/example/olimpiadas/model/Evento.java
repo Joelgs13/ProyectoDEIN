@@ -3,24 +3,24 @@ package com.example.olimpiadas.model;
 // Clase Evento
 public class Evento {
 
-    private int id_evento;
+    private int idEvento;
     private String nombre;
     private Olimpiada olimpiada;
     private Deporte deporte;
 
-    public Evento(int id_evento, String nombre, Olimpiada olimpiada, Deporte deporte) {
-        this.id_evento = id_evento;
+    public Evento(int idEvento, String nombre, Olimpiada olimpiada, Deporte deporte) {
+        this.idEvento = idEvento;
         this.nombre = nombre;
         this.olimpiada = olimpiada;
         this.deporte = deporte;
     }
 
-    public int getId_evento() {
-        return id_evento;
+    public int getIdEvento() {
+        return idEvento;
     }
 
-    public void setId_evento(int id_evento) {
-        this.id_evento = id_evento;
+    public void setIdEvento(int id_evento) {
+        this.idEvento = id_evento;
     }
 
     public String getNombre() {
@@ -51,7 +51,7 @@ public class Evento {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Evento evento = (Evento) o;
-        return id_evento == evento.id_evento &&
+        return idEvento == evento.idEvento &&
                 (nombre != null ? nombre.equals(evento.nombre) : evento.nombre == null) &&
                 (olimpiada != null ? olimpiada.equals(evento.olimpiada) : evento.olimpiada == null) &&
                 (deporte != null ? deporte.equals(evento.deporte) : evento.deporte == null);
@@ -59,7 +59,7 @@ public class Evento {
 
     @Override
     public int hashCode() {
-        int result = Integer.hashCode(id_evento);
+        int result = Integer.hashCode(idEvento);
         result = 31 * result + (nombre != null ? nombre.hashCode() : 0);
         result = 31 * result + (olimpiada != null ? olimpiada.hashCode() : 0);
         result = 31 * result + (deporte != null ? deporte.hashCode() : 0);
@@ -69,7 +69,7 @@ public class Evento {
     @Override
     public String toString() {
         return "Evento{" +
-                "id_evento=" + id_evento +
+                "idEvento=" + idEvento +
                 ", nombre='" + nombre + '\'' +
                 ", olimpiada=" + (olimpiada != null ? olimpiada.getNombre() : "null") +
                 ", deporte=" + (deporte != null ? deporte.getNombre() : "null") +

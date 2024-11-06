@@ -1,36 +1,17 @@
 package com.example.olimpiadas.DAO;
 
+import com.example.olimpiadas.model.Deporte;
 import com.example.olimpiadas.model.Evento;
 import com.example.olimpiadas.BBDD.ConexionBBDD;
+import com.example.olimpiadas.model.Olimpiada;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EventoDAO {
-
-    public void insert(Evento evento) throws SQLException {
-        String sql = "INSERT INTO Evento (nombre, id_olimpiada, id_deporte) VALUES (?, ?, ?)";
-        try (Connection connection = ConexionBBDD.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, evento.getNombre());
-            stmt.setInt(2, evento.getIdOlimpiada());
-            stmt.setInt(3, evento.getIdDeporte());
-            stmt.executeUpdate();
-        }
-    }
-
-    public void update(Evento evento) throws SQLException {
-        String sql = "UPDATE Evento SET nombre = ?, id_olimpiada = ?, id_deporte = ? WHERE id_evento = ?";
-        try (Connection connection = ConexionBBDD.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, evento.getNombre());
-            stmt.setInt(2, evento.getIdOlimpiada());
-            stmt.setInt(3, evento.getIdDeporte());
-            stmt.setInt(4, evento.getIdEvento());
-            stmt.executeUpdate();
-        }
-    }
 
     public void delete(int idEvento) throws SQLException {
         String sql = "DELETE FROM Evento WHERE id_evento = ?";
@@ -41,38 +22,62 @@ public class EventoDAO {
         }
     }
 
-    public Evento getById(int idEvento) throws SQLException {
-        String sql = "SELECT * FROM Evento WHERE id_evento = ?";
-        try (Connection connection = ConexionBBDD.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, idEvento);
-            ResultSet rs = stmt.executeQuery();
+    public static Evento getById(int id) throws SQLException {
+        ConexionBBDD connection;
+        Evento evento = null;
+        try {
+            connection = new ConexionBBDD();
+            String consulta = "SELECT id_evento,nombre,id_olimpiada,id_deporte FROM Evento WHERE id_evento = ?";
+            PreparedStatement pstmt = connection.getConnection().prepareStatement(consulta);
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return new Evento(
-                    rs.getInt("id_evento"),
-                    rs.getString("nombre"),
-                    rs.getInt("id_olimpiada"),
-                    rs.getInt("id_deporte")
-                );
+                int id_evento = rs.getInt("id_evento");
+                String nombre = rs.getString("nombre");
+                int id_olimpiada = rs.getInt("id_olimpiada");
+                int id_deporte = rs.getInt("id_deporte");
+
+                //Olimpiada
+                Olimpiada olimpiada = OlimpiadaDAO.getById(id_olimpiada);
+                //Deporte
+                Deporte deporte = DeporteDAO.getById(id_deporte);
+
+                evento = new Evento(id_evento,nombre,olimpiada,deporte);
             }
+            rs.close();
+            connection.CloseConexion();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
         }
-        return null;
+        return evento;
     }
 
-    public List<Evento> getAll() throws SQLException {
-        List<Evento> eventos = new ArrayList<>();
-        String sql = "SELECT * FROM Evento";
-        try (Connection connection = ConexionBBDD.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
-            ResultSet rs = stmt.executeQuery();
+    public static ObservableList<Evento> getAll() {
+        ConexionBBDD connection;
+        ObservableList<Evento> eventos = FXCollections.observableArrayList();
+        try{
+            connection = new ConexionBBDD();
+            String consulta = "SELECT id_evento,nombre,id_olimpiada,id_deporte FROM Evento";
+            PreparedStatement pstmt = connection.getConnection().prepareStatement(consulta);
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                eventos.add(new Evento(
-                    rs.getInt("id_evento"),
-                    rs.getString("nombre"),
-                    rs.getInt("id_olimpiada"),
-                    rs.getInt("id_deporte")
-                ));
+                int id_evento = rs.getInt(1);
+                String nombre = rs.getString(2);
+                int id_olimpiada = rs.getInt(3);
+                int id_deporte = rs.getInt(4);
+
+                //Olimpiada
+                Olimpiada olimpiada = OlimpiadaDAO.getById(id_olimpiada);
+                //Deporte
+                Deporte deporte = DeporteDAO.getById(id_deporte);
+
+                Evento evento = new Evento(id_evento,nombre,olimpiada,deporte);
+                eventos.add(evento);
             }
+            rs.close();
+            connection.CloseConexion();
+        }catch (SQLException e) {
+            System.err.println(e.getMessage());
         }
         return eventos;
     }

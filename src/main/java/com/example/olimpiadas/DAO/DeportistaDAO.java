@@ -2,6 +2,8 @@ package com.example.olimpiadas.DAO;
 
 import com.example.olimpiadas.model.Deportista;
 import com.example.olimpiadas.BBDD.ConexionBBDD;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -45,31 +47,54 @@ public class DeportistaDAO {
         }
     }
 
-    public Deportista findById(int id) throws SQLException {
-        String sql = "SELECT * FROM Deportista WHERE id_deportista = ?";
-        try (Connection connection = ConexionBBDD.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
+    public static Deportista getById(int id) throws SQLException {
+        ConexionBBDD connection;
+        Deportista deportista = null;
+        try {
+            connection = new ConexionBBDD();
+            String consulta = "SELECT id_deportista,nombre,sexo,peso,altura,foto FROM Deportista WHERE id_deportista = ?";
+            PreparedStatement pstmt = connection.getConnection().prepareStatement(consulta);
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return new Deportista(rs.getInt("id_deportista"), rs.getString("nombre"), rs.getString("sexo").charAt(0),
-                        (Integer) rs.getObject("peso"), (Integer) rs.getObject("altura"), rs.getBlob("foto"));
+                int id_deportista = rs.getInt(1);
+                String nombre = rs.getString(2);
+                char sexo = rs.getString(3).charAt(0);
+                int peso = rs.getInt(4);
+                int altura = rs.getInt(5);
+                Blob foto = rs.getBlob(6);
+                deportista = new Deportista(id_deportista,nombre,sexo,peso,altura,foto);
             }
+            rs.close();
+            connection.CloseConexion();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
         }
-        return null;
+        return deportista;
     }
 
-    public List<Deportista> findAll() throws SQLException {
-        List<Deportista> deportistas = new ArrayList<>();
-        String sql = "SELECT * FROM Deportista";
-        try (Connection connection = ConexionBBDD.getConnection();
-             Statement stmt = connection.createStatement()) {
-            ResultSet rs = stmt.executeQuery(sql);
+    public static ObservableList<Deportista> findAll() {
+        ConexionBBDD connection;
+        ObservableList<Deportista> deportistas = FXCollections.observableArrayList();
+        try{
+            connection = new ConexionBBDD();
+            String consulta = "SELECT id_deportista,nombre,sexo,peso,altura,foto FROM Deportista";
+            PreparedStatement pstmt = connection.getConnection().prepareStatement(consulta);
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                deportistas.add(new Deportista(rs.getInt("id_deportista"), rs.getString("nombre"),
-                        rs.getString("sexo").charAt(0), (Integer) rs.getObject("peso"),
-                        (Integer) rs.getObject("altura"), rs.getBlob("foto")));
+                int id_deportista = rs.getInt(1);
+                String nombre = rs.getString(2);
+                char sexo = rs.getString(3).charAt(0);
+                int peso = rs.getInt(4);
+                int altura = rs.getInt(5);
+                Blob foto = rs.getBlob(6);
+                Deportista deportista = new Deportista(id_deportista,nombre,sexo,peso,altura,foto);
+                deportistas.add(deportista);
             }
+            rs.close();
+            connection.CloseConexion();
+        }catch (SQLException e) {
+            System.err.println(e.getMessage());
         }
         return deportistas;
     }

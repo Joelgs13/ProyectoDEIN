@@ -1,6 +1,11 @@
 package com.example.olimpiadas.controller;
 
 import com.example.olimpiadas.DAO.DeporteDAO;
+import com.example.olimpiadas.DAO.OlimpiadaDAO;
+import com.example.olimpiadas.DAO.DeportistaDAO;
+import com.example.olimpiadas.DAO.EquipoDAO;
+import com.example.olimpiadas.DAO.EventoDAO;
+import com.example.olimpiadas.DAO.ParticipacionDAO;
 import com.example.olimpiadas.model.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
@@ -255,7 +260,7 @@ public class PantallaPrincipalController {
         tabla.getColumns().addAll(colIdDeportista, colNombre, colSexo, colPeso, colAltura);
 
         // Cargar los datos en la tabla
-        ObservableList<Deportista> deportistas = DaoDeportista.todosDeportistas();
+            ObservableList<Deportista> deportistas = DeportistaDAO.findAll();
         tabla.setItems(deportistas);
     }
 
@@ -279,7 +284,7 @@ public class PantallaPrincipalController {
         tabla.getColumns().addAll(colIdEquipo, colNombre, colIniciales);
 
         // Cargar los datos en la tabla
-        ObservableList<Equipo> equipos = DaoEquipo.todosEquipos();
+        ObservableList<Equipo> equipos = EquipoDAO.findAll();
         tabla.setItems(equipos);
     }
 
@@ -312,12 +317,13 @@ public class PantallaPrincipalController {
         tabla.getColumns().addAll(colIdEvento, colNombre, colOlimpiada, colDeporte);
 
         // Cargar los datos en la tabla
-        ObservableList<Evento> eventos = DaoEvento.todosEventos();
+            ObservableList<Evento> eventos = EventoDAO.getAll();
+
         tabla.setItems(eventos);
     }
 
     @FXML
-    void generarOlimpiadas() {
+    void generarOlimpiadas()  {
         // Limpiar columnas y filtro
         tfNombre.setText(null);
         tabla.getColumns().clear();
@@ -342,12 +348,13 @@ public class PantallaPrincipalController {
         tabla.getColumns().addAll(colIdOlimpiada, colNombre, colAnio, colTemporada, colCiudad);
 
         // Cargar los datos en la tabla
-        ObservableList<Olimpiada> olimpiadas = DaoOlimpiada.todasOlimpiadas();
+            ObservableList<Olimpiada> olimpiadas = OlimpiadaDAO.getAll();
+
         tabla.setItems(olimpiadas);
     }
 
     @FXML
-    void generarParticipaciones() {
+    void generarParticipaciones()  {
         // Limpiar columnas y filtro
         tfNombre.setText(null);
         tabla.getColumns().clear();
@@ -381,7 +388,7 @@ public class PantallaPrincipalController {
         tabla.getColumns().addAll(colDeportista, colEvento, colEquipo, colEdad, colMedalla);
 
         // Cargar los datos en la tabla
-        ObservableList<Participacion> participaciones = DaoParticipacion.todasParticipaciones();
+        ObservableList<Participacion> participaciones = ParticipacionDAO.findAll();
         tabla.setItems(participaciones);
     }
 

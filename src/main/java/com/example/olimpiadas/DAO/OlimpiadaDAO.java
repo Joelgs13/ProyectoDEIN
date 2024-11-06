@@ -2,6 +2,8 @@ package com.example.olimpiadas.DAO;
 
 import com.example.olimpiadas.model.Olimpiada;
 import com.example.olimpiadas.BBDD.ConexionBBDD;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -43,40 +45,52 @@ public class OlimpiadaDAO {
         }
     }
 
-    public Olimpiada getById(int idOlimpiada) throws SQLException {
-        String sql = "SELECT * FROM Olimpiada WHERE id_olimpiada = ?";
-        try (Connection connection = ConexionBBDD.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, idOlimpiada);
-            ResultSet rs = stmt.executeQuery();
+    public static Olimpiada getById(int id) {
+        ConexionBBDD connection;
+        Olimpiada olimpiada = null;
+        try {
+            connection = new ConexionBBDD();
+            String consulta = "SELECT id_olimpiada,nombre,anio,temporada,ciudad FROM Olimpiada WHERE id_olimpiada = ?";
+            PreparedStatement pstmt = connection.getConnection().prepareStatement(consulta);
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return new Olimpiada(
-                    rs.getInt("id_olimpiada"),
-                    rs.getString("nombre"),
-                    rs.getInt("anio"),
-                    rs.getString("temporada"),
-                    rs.getString("ciudad")
-                );
+                int id_olimpiada = rs.getInt(1);
+                String nombre = rs.getString(2);
+                int anio = rs.getInt(3);
+                String temporada = rs.getString(4);
+                String ciudad = rs.getString(5);
+                olimpiada = new Olimpiada(id_olimpiada,nombre,anio,temporada,ciudad);
             }
+            rs.close();
+            connection.CloseConexion();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
         }
-        return null;
+        return olimpiada;
     }
 
-    public List<Olimpiada> getAll() throws SQLException {
-        List<Olimpiada> olimpiadas = new ArrayList<>();
-        String sql = "SELECT * FROM Olimpiada";
-        try (Connection connection = ConexionBBDD.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
-            ResultSet rs = stmt.executeQuery();
+    public static ObservableList<Olimpiada> getAll()  {
+        ConexionBBDD connection;
+        ObservableList<Olimpiada> olimpiadas = FXCollections.observableArrayList();
+        try {
+            connection = new ConexionBBDD();
+            String consulta = "SELECT id_olimpiada, nombre, anio, temporada, ciudad FROM Olimpiada";
+            PreparedStatement pstmt = connection.getConnection().prepareStatement(consulta);
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                olimpiadas.add(new Olimpiada(
-                    rs.getInt("id_olimpiada"),
-                    rs.getString("nombre"),
-                    rs.getInt("anio"),
-                    rs.getString("temporada"),
-                    rs.getString("ciudad")
-                ));
+                int id_olimpiada = rs.getInt(1);
+                String nombre = rs.getString(2);
+                int anio = rs.getInt(3);
+                String temporada = rs.getString(4);
+                String ciudad = rs.getString(5);
+                Olimpiada olimpiada = new Olimpiada(id_olimpiada, nombre, anio, temporada, ciudad);
+                olimpiadas.add(olimpiada);
             }
+            rs.close();
+            connection.CloseConexion();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
         }
         return olimpiadas;
     }

@@ -37,17 +37,26 @@ public class DeporteDAO {
         }
     }
 
-    public Deporte findById(int id) throws SQLException {
-        String sql = "SELECT * FROM Deporte WHERE id_deporte = ?";
-        try (Connection connection = ConexionBBDD.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
+    public static Deporte getById(int id) {
+        ConexionBBDD connection;
+        Deporte deporte = null;
+        try {
+            connection = new ConexionBBDD();
+            String consulta = "SELECT id_deporte,nombre FROM Deporte WHERE id_deporte = ?";
+            PreparedStatement pstmt = connection.getConnection().prepareStatement(consulta);
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return new Deporte(rs.getInt("id_deporte"), rs.getString("nombre"));
+                int id_deporte = rs.getInt(1);
+                String nombre = rs.getString(2);
+                deporte = new Deporte(id_deporte,nombre);
             }
+            rs.close();
+            connection.CloseConexion();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
         }
-        return null;
+        return deporte;
     }
 
     public static ObservableList<Deporte> findAll() {

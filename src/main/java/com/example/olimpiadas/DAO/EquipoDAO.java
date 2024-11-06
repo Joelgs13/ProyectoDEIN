@@ -2,6 +2,8 @@ package com.example.olimpiadas.DAO;
 
 import com.example.olimpiadas.model.Equipo;
 import com.example.olimpiadas.BBDD.ConexionBBDD;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -39,28 +41,48 @@ public class EquipoDAO {
         }
     }
 
-    public Equipo findById(int id) throws SQLException {
-        String sql = "SELECT * FROM Equipo WHERE id_equipo = ?";
-        try (Connection connection = ConexionBBDD.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
+    public static Equipo getById(int id)  {
+        ConexionBBDD connection;
+        Equipo equipo = null;
+        try {
+            connection = new ConexionBBDD();
+            String consulta = "SELECT id_equipo,nombre,iniciales FROM Equipo WHERE id_equipo = ?";
+            PreparedStatement pstmt = connection.getConnection().prepareStatement(consulta);
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return new Equipo(rs.getInt("id_equipo"), rs.getString("nombre"), rs.getString("iniciales"));
+                int id_equipo = rs.getInt(1);
+                String nombre = rs.getString(2);
+                String iniciales = rs.getString(3);
+                equipo = new Equipo(id_equipo,nombre,iniciales);
             }
+            rs.close();
+            connection.CloseConexion();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
         }
-        return null;
+        return equipo;
     }
 
-    public List<Equipo> findAll() throws SQLException {
-        List<Equipo> equipos = new ArrayList<>();
-        String sql = "SELECT * FROM Equipo";
-        try (Connection connection = ConexionBBDD.getConnection();
-             Statement stmt = connection.createStatement()) {
-            ResultSet rs = stmt.executeQuery(sql);
+    public static ObservableList<Equipo> findAll() {
+        ConexionBBDD connection;
+        ObservableList<Equipo> equipos = FXCollections.observableArrayList();
+        try {
+            connection = new ConexionBBDD();
+            String consulta = "SELECT id_equipo, nombre, iniciales FROM Equipo";
+            PreparedStatement pstmt = connection.getConnection().prepareStatement(consulta);
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                equipos.add(new Equipo(rs.getInt("id_equipo"), rs.getString("nombre"), rs.getString("iniciales")));
+                int id_equipo = rs.getInt(1);
+                String nombre = rs.getString(2);
+                String iniciales = rs.getString(3);
+                Equipo equipo = new Equipo(id_equipo, nombre, iniciales);
+                equipos.add(equipo);
             }
+            rs.close();
+            connection.CloseConexion();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
         }
         return equipos;
     }
