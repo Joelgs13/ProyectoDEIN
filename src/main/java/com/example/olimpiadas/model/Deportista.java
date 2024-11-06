@@ -6,7 +6,7 @@ import java.sql.Blob;
 public class Deportista {
     private int idDeportista;
     private String nombre;
-    private char sexo;
+    private Genero sexo;
     private Integer peso;
     private Integer altura;
     private Blob foto;
@@ -14,7 +14,7 @@ public class Deportista {
     public Deportista(int idDeportista, String nombre, char sexo, Integer peso, Integer altura, Blob foto) {
         this.idDeportista = idDeportista;
         this.nombre = nombre;
-        this.sexo = sexo;
+        this.sexo = getGenero(sexo);
         this.peso = peso;
         this.altura = altura;
         this.foto = foto;
@@ -37,10 +37,13 @@ public class Deportista {
     }
 
     public char getSexo() {
-        return sexo;
+        if (sexo.equals(Genero.FEMALE)) {
+            return 'F';
+        }
+        return 'M';
     }
 
-    public void setSexo(char sexo) {
+    public void setSexo(Genero sexo) {
         this.sexo = sexo;
     }
 
@@ -73,12 +76,17 @@ public class Deportista {
         return "Deportista{idDeportista=" + idDeportista + ", nombre='" + nombre + "', sexo=" + sexo + ", peso=" + peso + ", altura=" + altura + "}";
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Deportista that = (Deportista) o;
-        return idDeportista == that.idDeportista;
+    public enum Genero {
+        MALE, FEMALE;
+    }
+
+    public Genero getGenero(char sex) {
+        if (sex == 'F') {
+            return Genero.FEMALE;
+        } else if (sex == 'M') {
+            return Genero.MALE;
+        }
+        return null;
     }
 
     @Override
