@@ -8,15 +8,32 @@ import javafx.collections.ObservableList;
 import java.sql.*;
 
 public class DeporteDAO {
-    
-    public void insert(Deporte deporte) throws SQLException {
-        String sql = "INSERT INTO Deporte (nombre) VALUES (?)";
-        try (Connection connection = ConexionBBDD.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, deporte.getNombre());
-            stmt.executeUpdate();
+
+    public static boolean addDeporte(Deporte d) {
+        ConexionBBDD connection = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            connection = new ConexionBBDD();
+            pstmt = connection.getConnection().prepareStatement("INSERT INTO Deporte (nombre) VALUES (?)");
+            pstmt.setString(1, d.getNombre());
+
+            return pstmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (connection != null) connection.CloseConexion();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
+
+
 
     public void update(Deporte deporte) throws SQLException {
         String sql = "UPDATE Deporte SET nombre = ? WHERE id_deporte = ?";

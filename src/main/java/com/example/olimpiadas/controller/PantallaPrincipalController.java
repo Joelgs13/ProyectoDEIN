@@ -10,6 +10,10 @@ import com.example.olimpiadas.model.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,7 +21,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
 
@@ -86,6 +93,13 @@ public class PantallaPrincipalController {
     @FXML
     private ComboBox<String> cbTablaElegida;
 
+    private Stage stage;
+
+    // Método para recibir el Stage desde la clase principal
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
     @FXML
     public void initialize() {
         ObservableList<String> tablas = FXCollections.observableArrayList(
@@ -96,9 +110,33 @@ public class PantallaPrincipalController {
     }
 
     @FXML
-    void aniadirDeporte(ActionEvent event) {
+    public void aniadirDeporte() {
+        if (stage != null) {
+            try {
+                // Cargar el archivo FXML de la ventana modal
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/olimpiadas/fxml/deporte.fxml"));
+                Scene deporteScene = new Scene(fxmlLoader.load());
 
+                // Crear un nuevo Stage para la ventana modal
+                Stage modalStage = new Stage();
+                modalStage.initOwner(stage);  // Define el stage principal como propietario
+                modalStage.initModality(Modality.WINDOW_MODAL); // Configura el nuevo Stage como modal
+                modalStage.setTitle("Añadir Deporte");
+                modalStage.setScene(deporteScene);
+                modalStage.setResizable(false); // Puedes ajustar esto según sea necesario
+
+                // Mostrar la ventana modal y esperar hasta que se cierre
+                modalStage.showAndWait();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.err.println("Error al cargar la ventana modal para añadir un deporte.");
+            }
+        } else {
+            System.err.println("El Stage principal no se ha inicializado.");
+        }
     }
+
 
     @FXML
     void aniadirDeportista(ActionEvent event) {
