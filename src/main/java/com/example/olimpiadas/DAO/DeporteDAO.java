@@ -35,15 +35,31 @@ public class DeporteDAO {
 
 
 
-    public void update(Deporte deporte) throws SQLException {
-        String sql = "UPDATE Deporte SET nombre = ? WHERE id_deporte = ?";
-        try (Connection connection = ConexionBBDD.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, deporte.getNombre());
-            stmt.setInt(2, deporte.getIdDeporte());
-            stmt.executeUpdate();
+    public static boolean updateDeporte(Deporte d) {
+        ConexionBBDD connection = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            connection = new ConexionBBDD();
+            pstmt = connection.getConnection().prepareStatement("UPDATE Deporte SET nombre = ? WHERE id_deporte = ?");
+            pstmt.setString(1, d.getNombre());
+            pstmt.setInt(2, d.getIdDeporte());
+
+            return pstmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (connection != null) connection.CloseConexion();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
+
 
     public void delete(int id) throws SQLException {
         String sql = "DELETE FROM Deporte WHERE id_deporte = ?";

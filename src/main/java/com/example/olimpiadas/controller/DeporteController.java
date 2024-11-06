@@ -18,6 +18,7 @@ public class DeporteController {
     private TextField txtNombre;
 
     private Stage stage;
+    private Deporte deporte;
 
     // Este método se llamará desde el controlador principal para pasar el Stage a la ventana modal
     public void setStage(Stage stage) {
@@ -61,5 +62,9 @@ public class DeporteController {
             alert.setTitle("Error");
             alert.showAndWait();
         }
+    }
+
+    public void setDeporte(Deporte deporteSeleccionado) {
+        this.deporte=deporteSeleccionado;
     }
 }
