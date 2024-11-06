@@ -27,6 +27,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class PantallaPrincipalController {
 
@@ -169,7 +170,49 @@ public class PantallaPrincipalController {
 
     @FXML
     void borrarDeporte(ActionEvent event) {
+        if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Deporte")) {
+            Deporte deporteSeleccionado = (Deporte) tabla.getSelectionModel().getSelectedItem();
 
+            if (deporteSeleccionado != null) {
+                // Confirmar la eliminación
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmar Eliminación");
+                alert.setHeaderText(null);
+                alert.setContentText("¿Estás seguro de que quieres eliminar este deporte?");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    boolean exito = DeporteDAO.deleteDeporte(deporteSeleccionado.getIdDeporte());
+                    if (exito) {
+                        // Actualizar la tabla después de eliminar
+                        cambiarDeTabla(null);
+                        Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                        successAlert.setTitle("Éxito");
+                        successAlert.setHeaderText(null);
+                        successAlert.setContentText("El deporte ha sido eliminado.");
+                        successAlert.showAndWait();
+                    } else {
+                        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                        errorAlert.setTitle("Error");
+                        errorAlert.setHeaderText(null);
+                        errorAlert.setContentText("No se pudo eliminar el deporte.");
+                        errorAlert.showAndWait();
+                    }
+                }
+            } else {
+                Alert warningAlert = new Alert(Alert.AlertType.WARNING);
+                warningAlert.setTitle("Advertencia");
+                warningAlert.setHeaderText(null);
+                warningAlert.setContentText("Por favor, selecciona un deporte para eliminar.");
+                warningAlert.showAndWait();
+            }
+        } else {
+            Alert warningAlert = new Alert(Alert.AlertType.WARNING);
+            warningAlert.setTitle("Advertencia");
+            warningAlert.setHeaderText(null);
+            warningAlert.setContentText("Por favor, selecciona un objeto deporte");
+            warningAlert.showAndWait();
+        }
     }
 
     @FXML
