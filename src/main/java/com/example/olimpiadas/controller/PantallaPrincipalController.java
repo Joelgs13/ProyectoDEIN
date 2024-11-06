@@ -2,9 +2,12 @@ package com.example.olimpiadas.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class PantallaPrincipalController {
 
@@ -67,6 +70,18 @@ public class PantallaPrincipalController {
 
     @FXML
     private TextField tfNombre;
+
+    @FXML
+    private ComboBox<String> cbTablaElegida;
+
+    @FXML
+    public void initialize() {
+        ObservableList<String> tablas = FXCollections.observableArrayList(
+                "Deporte", "Deportistas", "Equipos", "Eventos", "Olimpiadas", "Participaciones"
+        );
+        cbTablaElegida.setItems(tablas);
+        cbTablaElegida.getSelectionModel().selectFirst(); // Selecciona el primer elemento por defecto
+    }
 
     @FXML
     void aniadirDeporte(ActionEvent event) {
@@ -134,11 +149,6 @@ public class PantallaPrincipalController {
     }
 
     @FXML
-    void cambiarDeTabla(ActionEvent event) {
-
-    }
-
-    @FXML
     void editarAeropuerto(ActionEvent event) {
 
     }
@@ -178,4 +188,45 @@ public class PantallaPrincipalController {
 
     }
 
+    @FXML
+    void cambiarDeTabla(ActionEvent event) {
+        if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Deporte")) {
+            generarDeportes();
+        } else if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Deportistas")) {
+            generarDeportistas();
+        } else if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Equipos")) {
+            generarEquipos();
+        } else if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Eventos")) {
+            generarEventos();
+        } else if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Olimpiadas")) {
+            generarOlimpiadas();
+        } else {
+            generarParticipaciones();
+        }
+    }
+
+    // Métodos adicionales para manejar las tablas específicas
+    private void generarDeportes() {
+        // Lógica para cargar y mostrar datos de la tabla Deporte
+    }
+
+    private void generarDeportistas() {
+        // Lógica para cargar y mostrar datos de la tabla Deportistas
+    }
+
+    private void generarEquipos() {
+        // Lógica para cargar y mostrar datos de la tabla Equipos
+    }
+
+    private void generarEventos() {
+        // Lógica para cargar y mostrar datos de la tabla Eventos
+    }
+
+    private void generarOlimpiadas() {
+        // Lógica para cargar y mostrar datos de la tabla Olimpiadas
+    }
+
+    private void generarParticipaciones() {
+        // Lógica para cargar y mostrar datos de la tabla Participaciones
+    }
 }

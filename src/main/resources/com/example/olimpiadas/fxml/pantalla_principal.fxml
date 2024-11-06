@@ -82,7 +82,7 @@
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Label text="Tabla:" />
-                  <ComboBox onAction="#cambiarDeTabla" prefWidth="150.0" />
+                  <ComboBox fx:id="cbTablaElegida" onAction="#cambiarDeTabla" prefWidth="150.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="30.0" prefWidth="216.0">
