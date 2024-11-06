@@ -14,7 +14,11 @@ import javafx.scene.control.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 
+import java.sql.Blob;
 import java.sql.SQLException;
 
 public class PantallaPrincipalController {
@@ -192,8 +196,37 @@ public class PantallaPrincipalController {
     }
 
     @FXML
-    void filtrar(ActionEvent event) {
+    void filtrar(KeyEvent event) {
+        if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Deportistas")) {
+            ObservableList<Deportista> todosDeportistas = DeportistaDAO.findAll();
+            tabla.setItems(todosDeportistas.filtered(Deportista ->
+                    Deportista.getNombre().toLowerCase().contains(tfNombre.getText().toLowerCase())));
 
+        }else if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Deporte")) {
+            ObservableList<Deporte> todosDeportes = DeporteDAO.findAll();
+            tabla.setItems(todosDeportes.filtered(Deporte ->
+                    Deporte.getNombre().toLowerCase().contains(tfNombre.getText().toLowerCase())));
+
+        }else if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Equipos")) {
+            ObservableList<Equipo> todosEquipos = EquipoDAO.findAll();
+            tabla.setItems(todosEquipos.filtered(Equipo ->
+                    Equipo.getNombre().toLowerCase().contains(tfNombre.getText().toLowerCase())));
+
+        }else if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Olimpiadas")) {
+            ObservableList<Olimpiada> todasOlimpiadas = OlimpiadaDAO.getAll();
+            tabla.setItems(todasOlimpiadas.filtered(Olimpiada ->
+                    Olimpiada.getNombre().toLowerCase().contains(tfNombre.getText().toLowerCase())));
+
+        }else if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Eventos")) {
+            ObservableList<Evento> todosEventos = EventoDAO.getAll();
+            tabla.setItems(todosEventos.filtered(Evento ->
+                    Evento.getNombre().toLowerCase().contains(tfNombre.getText().toLowerCase())));
+        }else {
+            ObservableList<Participacion> todasParticipaciones = ParticipacionDAO.findAll();
+            tabla.setItems(todasParticipaciones.filtered(Participacion ->
+                    Participacion.getDeportista().getNombre().toLowerCase().contains(tfNombre.getText().toLowerCase())));
+        }
+        tabla.refresh();
     }
 
     @FXML
@@ -256,8 +289,50 @@ public class PantallaPrincipalController {
         TableColumn<Deportista, Integer> colAltura = new TableColumn<>("Altura");
         colAltura.setCellValueFactory(new PropertyValueFactory<>("altura"));
 
+        TableColumn<Deportista, Blob> colFoto = new TableColumn<>("Foto");
+        colFoto.setCellValueFactory(new PropertyValueFactory<>("foto"));
+
+        // Configurar el cell factory para mostrar las imágenes
+        colFoto.setCellFactory(column -> new TableCell<Deportista, Blob>() {
+            private final ImageView imageView = new ImageView();
+            private final Image imagenPorDefecto = new Image(getClass().getResourceAsStream("/com/example/olimpiadas/img/iconitoOlimpiadas.png"));
+
+            @Override
+            protected void updateItem(Blob item, boolean empty) {
+                super.updateItem(item, empty);
+
+                // Asegúrate de limpiar el gráfico si la celda está vacía
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    if (item == null) {
+                        // No hay imagen, usar imagen por defecto
+                        imageView.setImage(imagenPorDefecto);
+                    } else {
+                        try {
+                            // Convierte el Blob a un Image
+                            Image image = new Image(item.getBinaryStream());
+                            imageView.setImage(image);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                            // En caso de error, establecer la imagen por defecto
+                            imageView.setImage(imagenPorDefecto);
+                        }
+                    }
+
+                    // Ajusta el tamaño de la imagen y mantiene su proporción
+                    imageView.setFitWidth(50); // Establece el ancho de la imagen
+                    imageView.setFitHeight(50); // Establece la altura de la imagen
+                    imageView.setPreserveRatio(true); // Mantiene la proporción de la imagen
+
+                    // Establecer la gráfica de la celda
+                    setGraphic(imageView); // Muestra la imagen en la celda
+                }
+            }
+        });
+
         // Agregar columnas a la tabla
-        tabla.getColumns().addAll(colIdDeportista, colNombre, colSexo, colPeso, colAltura);
+        tabla.getColumns().addAll(colIdDeportista, colNombre, colSexo, colPeso, colAltura, colFoto);
 
         // Cargar los datos en la tabla
             ObservableList<Deportista> deportistas = DeportistaDAO.findAll();

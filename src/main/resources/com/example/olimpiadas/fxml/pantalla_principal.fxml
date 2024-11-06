@@ -88,7 +88,7 @@
             <HBox alignment="CENTER" prefHeight="30.0" prefWidth="216.0">
                <children>
                   <Label text="Nombre:" />
-                  <TextField fx:id="tfNombre" onAction="#filtrar" />
+                  <TextField fx:id="tfNombre" onKeyPressed="#filtrar" />
                </children>
             </HBox>
          </children>
