@@ -75,4 +75,9 @@ public class ConexionBBDD {
         }
         return null;
     }
+
+    public Connection CloseConexion() throws SQLException {
+        connection.close();
+        return connection;
+    }
 }

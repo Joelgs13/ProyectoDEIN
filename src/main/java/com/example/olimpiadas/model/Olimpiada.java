@@ -2,17 +2,18 @@ package com.example.olimpiadas.model;
 
 // Clase Olimpiada
 public class Olimpiada {
+
     private int idOlimpiada;
     private String nombre;
     private int anio;
-    private String temporada;
+    private TipoTemporada temporada;
     private String ciudad;
 
     public Olimpiada(int idOlimpiada, String nombre, int anio, String temporada, String ciudad) {
         this.idOlimpiada = idOlimpiada;
         this.nombre = nombre;
         this.anio = anio;
-        this.temporada = temporada;
+        this.temporada = getTipoTemporada(temporada);
         this.ciudad = ciudad;
     }
 
@@ -41,10 +42,13 @@ public class Olimpiada {
     }
 
     public String getTemporada() {
-        return temporada;
+        if (temporada.equals(TipoTemporada.Winter)) {
+            return "Winter";
+        }
+        return "Summer";
     }
 
-    public void setTemporada(String temporada) {
+    public void setTipoTemporada(TipoTemporada temporada) {
         this.temporada = temporada;
     }
 
@@ -54,6 +58,19 @@ public class Olimpiada {
 
     public void setCiudad(String ciudad) {
         this.ciudad = ciudad;
+    }
+
+    public enum TipoTemporada {
+        Summer,Winter;
+    }
+
+    public TipoTemporada getTipoTemporada(String temporada) {
+        if (temporada.equals("Winter")) {
+            return TipoTemporada.Winter;
+        } else if (temporada.equals("Summer")) {
+            return TipoTemporada.Summer;
+        }
+        return null;
     }
 
     @Override

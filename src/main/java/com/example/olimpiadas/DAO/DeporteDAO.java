@@ -2,10 +2,10 @@ package com.example.olimpiadas.DAO;
 
 import com.example.olimpiadas.model.Deporte;
 import com.example.olimpiadas.BBDD.ConexionBBDD;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class DeporteDAO {
     
@@ -50,15 +50,24 @@ public class DeporteDAO {
         return null;
     }
 
-    public List<Deporte> findAll() throws SQLException {
-        List<Deporte> deportes = new ArrayList<>();
-        String sql = "SELECT * FROM Deporte";
-        try (Connection connection = ConexionBBDD.getConnection();
-             Statement stmt = connection.createStatement()) {
-            ResultSet rs = stmt.executeQuery(sql);
+    public static ObservableList<Deporte> findAll() {
+        ConexionBBDD connection;
+        ObservableList<Deporte> deportes = FXCollections.observableArrayList();
+        try {
+            connection = new ConexionBBDD();
+            String consulta = "SELECT id_deporte, nombre FROM Deporte";
+            PreparedStatement pstmt = connection.getConnection().prepareStatement(consulta);
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                deportes.add(new Deporte(rs.getInt("id_deporte"), rs.getString("nombre")));
+                int id_deporte = rs.getInt(1);
+                String nombre = rs.getString(2);
+                Deporte deporte = new Deporte(id_deporte, nombre);
+                deportes.add(deporte);
             }
+            rs.close();
+            connection.CloseConexion();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
         }
         return deportes;
     }

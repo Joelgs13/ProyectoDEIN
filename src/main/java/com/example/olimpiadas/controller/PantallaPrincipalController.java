@@ -1,13 +1,16 @@
 package com.example.olimpiadas.controller;
 
+import com.example.olimpiadas.DAO.DeporteDAO;
+import com.example.olimpiadas.model.*;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.cell.PropertyValueFactory;
+
+import java.sql.SQLException;
 
 public class PantallaPrincipalController {
 
@@ -205,28 +208,181 @@ public class PantallaPrincipalController {
         }
     }
 
-    // Métodos adicionales para manejar las tablas específicas
-    private void generarDeportes() {
-        // Lógica para cargar y mostrar datos de la tabla Deporte
+    @FXML
+    void generarDeportes()  {
+        // Limpiar columnas y filtro
+        tfNombre.setText(null);
+        tabla.getColumns().clear();
+
+        // Crear columnas para la tabla Deporte
+        TableColumn<Deporte, Integer> colIdDeporte = new TableColumn<>("ID Deporte");
+        colIdDeporte.setCellValueFactory(new PropertyValueFactory<>("idDeporte"));
+
+        TableColumn<Deporte, String> colNombre = new TableColumn<>("Nombre");
+        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+
+        // Agregar columnas a la tabla
+        tabla.getColumns().addAll(colIdDeporte, colNombre);
+
+        // Cargar los datos en la tabla
+        ObservableList<Deporte> deportes = DeporteDAO.findAll();
+        tabla.setItems(deportes);
     }
 
-    private void generarDeportistas() {
-        // Lógica para cargar y mostrar datos de la tabla Deportistas
+    @FXML
+    void generarDeportistas() {
+        // Limpiar columnas y filtro
+        tfNombre.setText(null);
+        tabla.getColumns().clear();
+
+        // Crear columnas para la tabla Deportista
+        TableColumn<Deportista, Integer> colIdDeportista = new TableColumn<>("ID Deportista");
+        colIdDeportista.setCellValueFactory(new PropertyValueFactory<>("idDeportista"));
+
+        TableColumn<Deportista, String> colNombre = new TableColumn<>("Nombre");
+        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+
+        TableColumn<Deportista, String> colSexo = new TableColumn<>("Sexo");
+        colSexo.setCellValueFactory(new PropertyValueFactory<>("sexo"));
+
+        TableColumn<Deportista, Integer> colPeso = new TableColumn<>("Peso");
+        colPeso.setCellValueFactory(new PropertyValueFactory<>("peso"));
+
+        TableColumn<Deportista, Integer> colAltura = new TableColumn<>("Altura");
+        colAltura.setCellValueFactory(new PropertyValueFactory<>("altura"));
+
+        // Agregar columnas a la tabla
+        tabla.getColumns().addAll(colIdDeportista, colNombre, colSexo, colPeso, colAltura);
+
+        // Cargar los datos en la tabla
+        ObservableList<Deportista> deportistas = DaoDeportista.todosDeportistas();
+        tabla.setItems(deportistas);
     }
 
-    private void generarEquipos() {
-        // Lógica para cargar y mostrar datos de la tabla Equipos
+    @FXML
+    void generarEquipos() {
+        // Limpiar columnas y filtro
+        tfNombre.setText(null);
+        tabla.getColumns().clear();
+
+        // Crear columnas para la tabla Equipo
+        TableColumn<Equipo, Integer> colIdEquipo = new TableColumn<>("ID Equipo");
+        colIdEquipo.setCellValueFactory(new PropertyValueFactory<>("idEquipo"));
+
+        TableColumn<Equipo, String> colNombre = new TableColumn<>("Nombre");
+        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+
+        TableColumn<Equipo, String> colIniciales = new TableColumn<>("Iniciales");
+        colIniciales.setCellValueFactory(new PropertyValueFactory<>("iniciales"));
+
+        // Agregar columnas a la tabla
+        tabla.getColumns().addAll(colIdEquipo, colNombre, colIniciales);
+
+        // Cargar los datos en la tabla
+        ObservableList<Equipo> equipos = DaoEquipo.todosEquipos();
+        tabla.setItems(equipos);
     }
 
-    private void generarEventos() {
-        // Lógica para cargar y mostrar datos de la tabla Eventos
+    @FXML
+    void generarEventos() {
+        // Limpiar columnas y filtro
+        tfNombre.setText(null);
+        tabla.getColumns().clear();
+
+        // Crear columnas para la tabla Evento
+        TableColumn<Evento, Integer> colIdEvento = new TableColumn<>("ID Evento");
+        colIdEvento.setCellValueFactory(new PropertyValueFactory<>("idEvento"));
+
+        TableColumn<Evento, String> colNombre = new TableColumn<>("Nombre");
+        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+
+        TableColumn<Evento, String> colOlimpiada = new TableColumn<>("Olimpiada");
+        colOlimpiada.setCellValueFactory(cellData -> {
+            Olimpiada olimpiada = cellData.getValue().getOlimpiada();
+            return new SimpleStringProperty(olimpiada != null ? olimpiada.getNombre() : "");
+        });
+
+        TableColumn<Evento, String> colDeporte = new TableColumn<>("Deporte");
+        colDeporte.setCellValueFactory(cellData -> {
+            Deporte deporte = cellData.getValue().getDeporte();
+            return new SimpleStringProperty(deporte != null ? deporte.getNombre() : "");
+        });
+
+        // Agregar columnas a la tabla
+        tabla.getColumns().addAll(colIdEvento, colNombre, colOlimpiada, colDeporte);
+
+        // Cargar los datos en la tabla
+        ObservableList<Evento> eventos = DaoEvento.todosEventos();
+        tabla.setItems(eventos);
     }
 
-    private void generarOlimpiadas() {
-        // Lógica para cargar y mostrar datos de la tabla Olimpiadas
+    @FXML
+    void generarOlimpiadas() {
+        // Limpiar columnas y filtro
+        tfNombre.setText(null);
+        tabla.getColumns().clear();
+
+        // Crear columnas para la tabla Olimpiada
+        TableColumn<Olimpiada, Integer> colIdOlimpiada = new TableColumn<>("ID Olimpiada");
+        colIdOlimpiada.setCellValueFactory(new PropertyValueFactory<>("idOlimpiada"));
+
+        TableColumn<Olimpiada, String> colNombre = new TableColumn<>("Nombre");
+        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+
+        TableColumn<Olimpiada, Integer> colAnio = new TableColumn<>("Año");
+        colAnio.setCellValueFactory(new PropertyValueFactory<>("anio"));
+
+        TableColumn<Olimpiada, String> colTemporada = new TableColumn<>("Temporada");
+        colTemporada.setCellValueFactory(new PropertyValueFactory<>("temporada"));
+
+        TableColumn<Olimpiada, String> colCiudad = new TableColumn<>("Ciudad");
+        colCiudad.setCellValueFactory(new PropertyValueFactory<>("ciudad"));
+
+        // Agregar columnas a la tabla
+        tabla.getColumns().addAll(colIdOlimpiada, colNombre, colAnio, colTemporada, colCiudad);
+
+        // Cargar los datos en la tabla
+        ObservableList<Olimpiada> olimpiadas = DaoOlimpiada.todasOlimpiadas();
+        tabla.setItems(olimpiadas);
     }
 
-    private void generarParticipaciones() {
-        // Lógica para cargar y mostrar datos de la tabla Participaciones
+    @FXML
+    void generarParticipaciones() {
+        // Limpiar columnas y filtro
+        tfNombre.setText(null);
+        tabla.getColumns().clear();
+
+        // Crear columnas para la tabla Participacion
+        TableColumn<Participacion, String> colDeportista = new TableColumn<>("Deportista");
+        colDeportista.setCellValueFactory(cellData -> {
+            Deportista deportista = cellData.getValue().getDeportista();
+            return new SimpleStringProperty(deportista != null ? deportista.getNombre() : "");
+        });
+
+        TableColumn<Participacion, String> colEvento = new TableColumn<>("Evento");
+        colEvento.setCellValueFactory(cellData -> {
+            Evento evento = cellData.getValue().getEvento();
+            return new SimpleStringProperty(evento != null ? evento.getNombre() : "");
+        });
+
+        TableColumn<Participacion, String> colEquipo = new TableColumn<>("Equipo");
+        colEquipo.setCellValueFactory(cellData -> {
+            Equipo equipo = cellData.getValue().getEquipo();
+            return new SimpleStringProperty(equipo != null ? equipo.getNombre() : "");
+        });
+
+        TableColumn<Participacion, Integer> colEdad = new TableColumn<>("Edad");
+        colEdad.setCellValueFactory(new PropertyValueFactory<>("edad"));
+
+        TableColumn<Participacion, String> colMedalla = new TableColumn<>("Medalla");
+        colMedalla.setCellValueFactory(new PropertyValueFactory<>("medalla"));
+
+        // Agregar columnas a la tabla
+        tabla.getColumns().addAll(colDeportista, colEvento, colEquipo, colEdad, colMedalla);
+
+        // Cargar los datos en la tabla
+        ObservableList<Participacion> participaciones = DaoParticipacion.todasParticipaciones();
+        tabla.setItems(participaciones);
     }
+
 }

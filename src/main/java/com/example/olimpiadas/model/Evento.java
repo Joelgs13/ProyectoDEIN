@@ -2,24 +2,25 @@ package com.example.olimpiadas.model;
 
 // Clase Evento
 public class Evento {
-    private int idEvento;
+
+    private int id_evento;
     private String nombre;
-    private int idOlimpiada;
-    private int idDeporte;
+    private Olimpiada olimpiada;
+    private Deporte deporte;
 
-    public Evento(int idEvento, String nombre, int idOlimpiada, int idDeporte) {
-        this.idEvento = idEvento;
+    public Evento(int id_evento, String nombre, Olimpiada olimpiada, Deporte deporte) {
+        this.id_evento = id_evento;
         this.nombre = nombre;
-        this.idOlimpiada = idOlimpiada;
-        this.idDeporte = idDeporte;
+        this.olimpiada = olimpiada;
+        this.deporte = deporte;
     }
 
-    public int getIdEvento() {
-        return idEvento;
+    public int getId_evento() {
+        return id_evento;
     }
 
-    public void setIdEvento(int idEvento) {
-        this.idEvento = idEvento;
+    public void setId_evento(int id_evento) {
+        this.id_evento = id_evento;
     }
 
     public String getNombre() {
@@ -30,37 +31,49 @@ public class Evento {
         this.nombre = nombre;
     }
 
-    public int getIdOlimpiada() {
-        return idOlimpiada;
+    public Olimpiada getOlimpiada() {
+        return olimpiada;
     }
 
-    public void setIdOlimpiada(int idOlimpiada) {
-        this.idOlimpiada = idOlimpiada;
+    public void setOlimpiada(Olimpiada olimpiada) {
+        this.olimpiada = olimpiada;
     }
 
-    public int getIdDeporte() {
-        return idDeporte;
+    public Deporte getDeporte() {
+        return deporte;
     }
 
-    public void setIdDeporte(int idDeporte) {
-        this.idDeporte = idDeporte;
+    public void setDeporte(Deporte deporte) {
+        this.deporte = deporte;
     }
-
-    @Override
-    public String toString() {
-        return "Evento{idEvento=" + idEvento + ", nombre='" + nombre + "', idOlimpiada=" + idOlimpiada + ", idDeporte=" + idDeporte + "}";
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Evento evento = (Evento) o;
-        return idEvento == evento.idEvento;
+        return id_evento == evento.id_evento &&
+                (nombre != null ? nombre.equals(evento.nombre) : evento.nombre == null) &&
+                (olimpiada != null ? olimpiada.equals(evento.olimpiada) : evento.olimpiada == null) &&
+                (deporte != null ? deporte.equals(evento.deporte) : evento.deporte == null);
     }
 
     @Override
     public int hashCode() {
-        return Integer.hashCode(idEvento);
+        int result = Integer.hashCode(id_evento);
+        result = 31 * result + (nombre != null ? nombre.hashCode() : 0);
+        result = 31 * result + (olimpiada != null ? olimpiada.hashCode() : 0);
+        result = 31 * result + (deporte != null ? deporte.hashCode() : 0);
+        return result;
     }
+
+    @Override
+    public String toString() {
+        return "Evento{" +
+                "id_evento=" + id_evento +
+                ", nombre='" + nombre + '\'' +
+                ", olimpiada=" + (olimpiada != null ? olimpiada.getNombre() : "null") +
+                ", deporte=" + (deporte != null ? deporte.getNombre() : "null") +
+                '}';
+    }
+
 }
