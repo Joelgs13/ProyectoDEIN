@@ -239,37 +239,41 @@ public class PantallaPrincipalController {
 
     @FXML
     void filtrar(KeyEvent event) {
+        String textoBusqueda = tfNombre.getText() != null ? tfNombre.getText().toLowerCase() : ""; // Asegúrate de que el texto no sea null
+
         if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Deportistas")) {
             ObservableList<Deportista> todosDeportistas = DeportistaDAO.findAll();
-            tabla.setItems(todosDeportistas.filtered(Deportista ->
-                    Deportista.getNombre().toLowerCase().contains(tfNombre.getText().toLowerCase())));
+            tabla.setItems(todosDeportistas.filtered(deportista ->
+                    deportista.getNombre().toLowerCase().contains(textoBusqueda)));
 
-        }else if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Deporte")) {
+        } else if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Deporte")) {
             ObservableList<Deporte> todosDeportes = DeporteDAO.findAll();
-            tabla.setItems(todosDeportes.filtered(Deporte ->
-                    Deporte.getNombre().toLowerCase().contains(tfNombre.getText().toLowerCase())));
+            tabla.setItems(todosDeportes.filtered(deporte ->
+                    deporte.getNombre().toLowerCase().contains(textoBusqueda)));
 
-        }else if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Equipos")) {
+        } else if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Equipos")) {
             ObservableList<Equipo> todosEquipos = EquipoDAO.findAll();
-            tabla.setItems(todosEquipos.filtered(Equipo ->
-                    Equipo.getNombre().toLowerCase().contains(tfNombre.getText().toLowerCase())));
+            tabla.setItems(todosEquipos.filtered(equipo ->
+                    equipo.getNombre().toLowerCase().contains(textoBusqueda)));
 
-        }else if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Olimpiadas")) {
+        } else if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Olimpiadas")) {
             ObservableList<Olimpiada> todasOlimpiadas = OlimpiadaDAO.getAll();
-            tabla.setItems(todasOlimpiadas.filtered(Olimpiada ->
-                    Olimpiada.getNombre().toLowerCase().contains(tfNombre.getText().toLowerCase())));
+            tabla.setItems(todasOlimpiadas.filtered(olimpiada ->
+                    olimpiada.getNombre().toLowerCase().contains(textoBusqueda)));
 
-        }else if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Eventos")) {
+        } else if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Eventos")) {
             ObservableList<Evento> todosEventos = EventoDAO.getAll();
-            tabla.setItems(todosEventos.filtered(Evento ->
-                    Evento.getNombre().toLowerCase().contains(tfNombre.getText().toLowerCase())));
-        }else {
+            tabla.setItems(todosEventos.filtered(evento ->
+                    evento.getNombre().toLowerCase().contains(textoBusqueda)));
+
+        } else {
             ObservableList<Participacion> todasParticipaciones = ParticipacionDAO.findAll();
-            tabla.setItems(todasParticipaciones.filtered(Participacion ->
-                    Participacion.getDeportista().getNombre().toLowerCase().contains(tfNombre.getText().toLowerCase())));
+            tabla.setItems(todasParticipaciones.filtered(participacion ->
+                    participacion.getDeportista().getNombre().toLowerCase().contains(textoBusqueda)));
         }
         tabla.refresh();
     }
+
 
     @FXML
     void cambiarDeTabla(ActionEvent event) {
