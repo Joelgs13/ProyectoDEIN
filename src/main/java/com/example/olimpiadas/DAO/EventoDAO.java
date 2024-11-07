@@ -73,11 +73,32 @@ public class EventoDAO {
         PreparedStatement pstmt = null;
 
         try {
+            // Establecer la conexión
             connection = new ConexionBBDD();
-            pstmt = connection.getConnection().prepareStatement("DELETE FROM Evento WHERE id_evento = ?");
+
+            // Comprobar si el evento está asociado a alguna participación
+            String consulta = "SELECT count(*) as cont FROM Participacion WHERE id_evento = ?";
+            pstmt = connection.getConnection().prepareStatement(consulta);
             pstmt.setInt(1, idEvento);
 
-            return pstmt.executeUpdate() > 0;  // Retorna true si se eliminó al menos un registro
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                int cont = rs.getInt("cont");
+                rs.close();
+
+                if (cont > 0) {
+                    // Si el evento está asociado a alguna participación, no se puede eliminar
+                    return false;
+                }
+            }
+
+            // Eliminar el evento de la base de datos si no tiene participaciones asociadas
+            String deleteQuery = "DELETE FROM Evento WHERE id_evento = ?";
+            pstmt = connection.getConnection().prepareStatement(deleteQuery);
+            pstmt.setInt(1, idEvento);
+
+            // Ejecutar la eliminación
+            return pstmt.executeUpdate() > 0;  // Retorna true si la eliminación fue exitosa
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -91,6 +112,7 @@ public class EventoDAO {
             }
         }
     }
+
 
 
     public static Evento getById(int id) throws SQLException {
