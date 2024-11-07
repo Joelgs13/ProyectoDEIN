@@ -318,7 +318,7 @@ public class PantallaPrincipalController {
     @FXML
     void editarDeportista(ActionEvent event) {
         // Verificar que la tabla seleccionada es de Deportistas
-        if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Deportista")) {
+        if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Deportistas")) {
             Deportista deportistaSeleccionado = (Deportista) tabla.getSelectionModel().getSelectedItem();
 
             if (deportistaSeleccionado != null) {
