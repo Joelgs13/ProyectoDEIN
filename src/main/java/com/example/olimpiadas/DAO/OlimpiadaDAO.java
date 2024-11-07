@@ -11,39 +11,87 @@ import java.util.List;
 
 public class OlimpiadaDAO {
 
-    public void insert(Olimpiada olimpiada) throws SQLException {
-        String sql = "INSERT INTO Olimpiada (nombre, anio, temporada, ciudad) VALUES (?, ?, ?, ?)";
-        try (Connection connection = ConexionBBDD.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, olimpiada.getNombre());
-            stmt.setInt(2, olimpiada.getAnio());
-            stmt.setString(3, olimpiada.getTemporada());
-            stmt.setString(4, olimpiada.getCiudad());
-            stmt.executeUpdate();
+    public static boolean addOlimpiada(Olimpiada olimpiada) {
+        ConexionBBDD connection = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            connection = new ConexionBBDD();
+            pstmt = connection.getConnection().prepareStatement("INSERT INTO Olimpiada (nombre, anio, temporada, ciudad) VALUES (?, ?, ?, ?)");
+            pstmt.setString(1, olimpiada.getNombre());
+            pstmt.setInt(2, olimpiada.getAnio());
+            pstmt.setString(3, olimpiada.getTemporada());  // El tipo Temporada ya es un String
+            pstmt.setString(4, olimpiada.getCiudad());
+
+            return pstmt.executeUpdate() > 0; // Retorna true si la inserción fue exitosa
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;  // Retorna false en caso de error
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (connection != null) connection.CloseConexion();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public void update(Olimpiada olimpiada) throws SQLException {
-        String sql = "UPDATE Olimpiada SET nombre = ?, anio = ?, temporada = ?, ciudad = ? WHERE id_olimpiada = ?";
-        try (Connection connection = ConexionBBDD.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, olimpiada.getNombre());
-            stmt.setInt(2, olimpiada.getAnio());
-            stmt.setString(3, olimpiada.getTemporada());
-            stmt.setString(4, olimpiada.getCiudad());
-            stmt.setInt(5, olimpiada.getIdOlimpiada());
-            stmt.executeUpdate();
+
+    public static boolean updateOlimpiada(Olimpiada olimpiada) {
+        ConexionBBDD connection = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            connection = new ConexionBBDD();
+            pstmt = connection.getConnection().prepareStatement("UPDATE Olimpiada SET nombre = ?, anio = ?, temporada = ?, ciudad = ? WHERE id_olimpiada = ?");
+            pstmt.setString(1, olimpiada.getNombre());
+            pstmt.setInt(2, olimpiada.getAnio());
+            pstmt.setString(3, olimpiada.getTemporada());
+            pstmt.setString(4, olimpiada.getCiudad());
+            pstmt.setInt(5, olimpiada.getIdOlimpiada());
+
+            return pstmt.executeUpdate() > 0;  // Retorna true si la actualización fue exitosa
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;  // Retorna false en caso de error
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (connection != null) connection.CloseConexion();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public void delete(int idOlimpiada) throws SQLException {
-        String sql = "DELETE FROM Olimpiada WHERE id_olimpiada = ?";
-        try (Connection connection = ConexionBBDD.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, idOlimpiada);
-            stmt.executeUpdate();
+
+    public static boolean deleteOlimpiada(int idOlimpiada) {
+        ConexionBBDD connection = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            connection = new ConexionBBDD();
+            pstmt = connection.getConnection().prepareStatement("DELETE FROM Olimpiada WHERE id_olimpiada = ?");
+            pstmt.setInt(1, idOlimpiada);
+
+            return pstmt.executeUpdate() > 0;  // Retorna true si la eliminación fue exitosa
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;  // Retorna false en caso de error
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (connection != null) connection.CloseConexion();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
+
 
     public static Olimpiada getById(int id) {
         ConexionBBDD connection;
