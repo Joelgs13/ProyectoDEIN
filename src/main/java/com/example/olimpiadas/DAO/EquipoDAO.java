@@ -11,35 +11,83 @@ import java.util.List;
 
 public class EquipoDAO {
 
-    public void insert(Equipo equipo) throws SQLException {
-        String sql = "INSERT INTO Equipo (nombre, iniciales) VALUES (?, ?)";
-        try (Connection connection = ConexionBBDD.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, equipo.getNombre());
-            stmt.setString(2, equipo.getIniciales());
-            stmt.executeUpdate();
+    public static boolean addEquipo(Equipo equipo) {
+        ConexionBBDD connection = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            connection = new ConexionBBDD();
+            pstmt = connection.getConnection().prepareStatement("INSERT INTO Equipo (nombre, iniciales) VALUES (?, ?)");
+            pstmt.setString(1, equipo.getNombre());
+            pstmt.setString(2, equipo.getIniciales());
+
+            return pstmt.executeUpdate() > 0; // Retorna true si se insertó correctamente
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;  // Retorna false en caso de error
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (connection != null) connection.CloseConexion();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public void update(Equipo equipo) throws SQLException {
-        String sql = "UPDATE Equipo SET nombre = ?, iniciales = ? WHERE id_equipo = ?";
-        try (Connection connection = ConexionBBDD.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, equipo.getNombre());
-            stmt.setString(2, equipo.getIniciales());
-            stmt.setInt(3, equipo.getIdEquipo());
-            stmt.executeUpdate();
+
+    public static boolean updateEquipo(Equipo equipo) {
+        ConexionBBDD connection = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            connection = new ConexionBBDD();
+            pstmt = connection.getConnection().prepareStatement("UPDATE Equipo SET nombre = ?, iniciales = ? WHERE id_equipo = ?");
+            pstmt.setString(1, equipo.getNombre());
+            pstmt.setString(2, equipo.getIniciales());
+            pstmt.setInt(3, equipo.getIdEquipo());
+
+            return pstmt.executeUpdate() > 0; // Retorna true si se actualizó correctamente
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;  // Retorna false en caso de error
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (connection != null) connection.CloseConexion();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public void delete(int id) throws SQLException {
-        String sql = "DELETE FROM Equipo WHERE id_equipo = ?";
-        try (Connection connection = ConexionBBDD.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
+
+    public static boolean deleteEquipo(int id) {
+        ConexionBBDD connection = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            connection = new ConexionBBDD();
+            pstmt = connection.getConnection().prepareStatement("DELETE FROM Equipo WHERE id_equipo = ?");
+            pstmt.setInt(1, id);
+
+            return pstmt.executeUpdate() > 0;  // Retorna true si se eliminó al menos un registro
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;  // Retorna false en caso de error
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (connection != null) connection.CloseConexion();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
+
 
     public static Equipo getById(int id)  {
         ConexionBBDD connection;

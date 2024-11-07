@@ -174,8 +174,32 @@ public class PantallaPrincipalController {
 
     @FXML
     void aniadirEquipo(ActionEvent event) {
+        try {
+            // Cargar el FXML de la ventana modal para Equipo
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/olimpiadas/fxml/equipo.fxml"));
+            Parent root = loader.load();
 
+            // Obtener el controlador de la ventana modal
+            EquipoController controller = loader.getController();
+
+            // Pasar el stage de la ventana principal al controlador modal
+            Stage stage = new Stage();
+            controller.setStage(stage);
+
+            // Crear y mostrar la escena
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Agregar Equipo");
+            stage.showAndWait();
+
+            // Actualizar la tabla o cualquier otra vista después de la acción
+            cambiarDeTabla(null);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     @FXML
     void aniadirEvento(ActionEvent event) {
@@ -289,8 +313,51 @@ public class PantallaPrincipalController {
 
     @FXML
     void borrarEquipo(ActionEvent event) {
+        if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Equipos")) {
+            Equipo equipoSeleccionado = (Equipo) tabla.getSelectionModel().getSelectedItem();
 
+            if (equipoSeleccionado != null) {
+                // Confirmar la eliminación
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmar Eliminación");
+                alert.setHeaderText(null);
+                alert.setContentText("¿Estás seguro de que quieres eliminar este equipo?");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    boolean exito = EquipoDAO.deleteEquipo(equipoSeleccionado.getIdEquipo());
+                    if (exito) {
+                        // Actualizar la tabla después de eliminar
+                        cambiarDeTabla(null);
+                        Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                        successAlert.setTitle("Éxito");
+                        successAlert.setHeaderText(null);
+                        successAlert.setContentText("El equipo ha sido eliminado.");
+                        successAlert.showAndWait();
+                    } else {
+                        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                        errorAlert.setTitle("Error");
+                        errorAlert.setHeaderText(null);
+                        errorAlert.setContentText("No se pudo eliminar el equipo.");
+                        errorAlert.showAndWait();
+                    }
+                }
+            } else {
+                Alert warningAlert = new Alert(Alert.AlertType.WARNING);
+                warningAlert.setTitle("Advertencia");
+                warningAlert.setHeaderText(null);
+                warningAlert.setContentText("Por favor, selecciona un equipo para eliminar.");
+                warningAlert.showAndWait();
+            }
+        } else {
+            Alert warningAlert = new Alert(Alert.AlertType.WARNING);
+            warningAlert.setTitle("Advertencia");
+            warningAlert.setHeaderText(null);
+            warningAlert.setContentText("Por favor, selecciona un objeto equipo.");
+            warningAlert.showAndWait();
+        }
     }
+
 
     @FXML
     void borrarEvento(ActionEvent event) {
@@ -409,8 +476,53 @@ public class PantallaPrincipalController {
 
     @FXML
     void editarEquipo(ActionEvent event) {
+        // Verificar que la tabla seleccionada es de Equipos
+        if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Equipos")) {
+            Equipo equipoSeleccionado = (Equipo) tabla.getSelectionModel().getSelectedItem();
 
+            if (equipoSeleccionado != null) {
+                try {
+                    // Cargar el FXML de la ventana modal para editar el equipo
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/olimpiadas/fxml/equipo.fxml"));
+                    Parent root = loader.load();
+
+                    // Obtener el controlador de la ventana modal
+                    EquipoController controller = loader.getController();
+
+                    // Pasar el equipo seleccionado al controlador para editar
+                    controller.setEquipo(equipoSeleccionado);
+
+                    // Pasar el stage de la ventana principal al controlador modal
+                    Stage stage = new Stage();
+                    controller.setStage(stage);
+
+                    // Crear y mostrar la escena
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.setTitle("Editar Equipo");
+                    stage.showAndWait();
+
+                    cambiarDeTabla(null); // Actualizar la tabla después de la edición
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                // Mostrar mensaje si no se ha seleccionado un equipo
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Advertencia");
+                alert.setHeaderText(null);
+                alert.setContentText("Por favor, seleccione un equipo para editar.");
+                alert.showAndWait();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Advertencia");
+            alert.setHeaderText(null);
+            alert.setContentText("Por favor, seleccione un equipo.");
+            alert.showAndWait();
+        }
     }
+
 
     @FXML
     void editarEvento(ActionEvent event) {
