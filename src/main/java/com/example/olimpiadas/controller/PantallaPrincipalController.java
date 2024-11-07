@@ -241,8 +241,51 @@ public class PantallaPrincipalController {
 
     @FXML
     void borrarDeportista(ActionEvent event) {
+        if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Deportistas")) { // Verificar que la selección sea "Deportistas"
+            Deportista deportistaSeleccionado = (Deportista) tabla.getSelectionModel().getSelectedItem();
 
+            if (deportistaSeleccionado != null) {
+                // Confirmar la eliminación
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmar Eliminación");
+                alert.setHeaderText(null);
+                alert.setContentText("¿Estás seguro de que quieres eliminar este deportista?");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    boolean exito = DeportistaDAO.deleteDeportista(deportistaSeleccionado.getIdDeportista());
+                    if (exito) {
+                        // Actualizar la tabla después de eliminar
+                        cambiarDeTabla(null);
+                        Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                        successAlert.setTitle("Éxito");
+                        successAlert.setHeaderText(null);
+                        successAlert.setContentText("El deportista ha sido eliminado.");
+                        successAlert.showAndWait();
+                    } else {
+                        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                        errorAlert.setTitle("Error");
+                        errorAlert.setHeaderText(null);
+                        errorAlert.setContentText("No se pudo eliminar el deportista.");
+                        errorAlert.showAndWait();
+                    }
+                }
+            } else {
+                Alert warningAlert = new Alert(Alert.AlertType.WARNING);
+                warningAlert.setTitle("Advertencia");
+                warningAlert.setHeaderText(null);
+                warningAlert.setContentText("Por favor, selecciona un deportista para eliminar.");
+                warningAlert.showAndWait();
+            }
+        } else {
+            Alert warningAlert = new Alert(Alert.AlertType.WARNING);
+            warningAlert.setTitle("Advertencia");
+            warningAlert.setHeaderText(null);
+            warningAlert.setContentText("Por favor, selecciona un objeto deportista.");
+            warningAlert.showAndWait();
+        }
     }
+
 
     @FXML
     void borrarEquipo(ActionEvent event) {

@@ -69,14 +69,30 @@ public class DeportistaDAO {
     }
 
 
-    public void delete(int id) throws SQLException {
-        String sql = "DELETE FROM Deportista WHERE id_deportista = ?";
-        try (Connection connection = ConexionBBDD.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
+    public static boolean deleteDeportista(int id) {
+        ConexionBBDD connection = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            connection = new ConexionBBDD();
+            pstmt = connection.getConnection().prepareStatement("DELETE FROM Deportista WHERE id_deportista = ?");
+            pstmt.setInt(1, id);
+
+            return pstmt.executeUpdate() > 0;  // Retorna true si se eliminó al menos un registro
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;  // Retorna false en caso de error
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (connection != null) connection.CloseConexion();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
+
 
     public static Deportista getById(int id) throws SQLException {
         ConexionBBDD connection;
