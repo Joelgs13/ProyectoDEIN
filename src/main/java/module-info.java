@@ -1,7 +1,7 @@
 module com.example.olimpiadas {
     requires javafx.controls;
     requires javafx.fxml;
-    requires java.sql;
+    requires java.sql.rowset;
 
     opens com.example.olimpiadas.model to javafx.base;
 

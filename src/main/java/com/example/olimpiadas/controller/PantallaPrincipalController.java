@@ -145,8 +145,32 @@ public class PantallaPrincipalController {
 
     @FXML
     void aniadirDeportista(ActionEvent event) {
+        try {
+            // Cargar el FXML de la ventana modal para Deportista
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/olimpiadas/fxml/deportista.fxml"));
+            Parent root = loader.load();
 
+            // Obtener el controlador de la ventana modal
+            DeportistaController controller = loader.getController();
+
+            // Pasar el stage de la ventana principal al controlador modal
+            Stage stage = new Stage();
+            controller.setStage(stage);
+
+            // Crear y mostrar la escena
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Agregar Deportista");
+            stage.showAndWait();
+
+            // Actualizar la tabla o cualquier otra vista después de la acción
+            cambiarDeTabla(null);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     @FXML
     void aniadirEquipo(ActionEvent event) {
@@ -293,8 +317,52 @@ public class PantallaPrincipalController {
 
     @FXML
     void editarDeportista(ActionEvent event) {
+        // Verificar que la tabla seleccionada es de Deportistas
+        if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Deportista")) {
+            Deportista deportistaSeleccionado = (Deportista) tabla.getSelectionModel().getSelectedItem();
 
+            if (deportistaSeleccionado != null) {
+                try {
+                    // Cargar el FXML de la ventana modal
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/olimpiadas/fxml/deportista.fxml"));
+                    Parent root = loader.load();
+
+                    // Obtener el controlador de la ventana modal
+                    DeportistaController controller = loader.getController();
+
+                    // Pasar el deportista seleccionado al controlador para editar
+                    controller.setDeportista(deportistaSeleccionado);
+
+                    // Pasar el stage de la ventana principal al controlador modal
+                    Stage stage = new Stage();
+                    controller.setStage(stage);
+
+                    // Crear y mostrar la escena
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.setTitle("Editar Deportista");
+                    stage.showAndWait();
+                    cambiarDeTabla(null); // Actualizar la tabla después de la edición
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                // Mostrar mensaje si no se ha seleccionado un deportista
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Advertencia");
+                alert.setHeaderText(null);
+                alert.setContentText("Por favor, seleccione un deportista para editar.");
+                alert.showAndWait();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Advertencia");
+            alert.setHeaderText(null);
+            alert.setContentText("Por favor, seleccione un deportista.");
+            alert.showAndWait();
+        }
     }
+
 
     @FXML
     void editarEquipo(ActionEvent event) {

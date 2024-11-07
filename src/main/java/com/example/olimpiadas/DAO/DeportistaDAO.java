@@ -11,32 +11,63 @@ import java.util.List;
 
 public class DeportistaDAO {
 
-    public void insert(Deportista deportista) throws SQLException {
-        String sql = "INSERT INTO Deportista (nombre, sexo, peso, altura, foto) VALUES (?, ?, ?, ?, ?)";
-        try (Connection connection = ConexionBBDD.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, deportista.getNombre());
-            stmt.setString(2, String.valueOf(deportista.getSexo()));
-            stmt.setObject(3, deportista.getPeso(), Types.INTEGER);
-            stmt.setObject(4, deportista.getAltura(), Types.INTEGER);
-            stmt.setBlob(5, deportista.getFoto());
-            stmt.executeUpdate();
+    public static boolean addDeportista(Deportista deportista) {
+        ConexionBBDD connection = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            connection = new ConexionBBDD();
+            pstmt = connection.getConnection().prepareStatement("INSERT INTO Deportista (nombre, sexo, peso, altura, foto) VALUES (?, ?, ?, ?, ?)");
+            pstmt.setString(1, deportista.getNombre());
+            pstmt.setString(2, String.valueOf(deportista.getSexo()));
+            pstmt.setObject(3, deportista.getPeso(), Types.INTEGER);
+            pstmt.setObject(4, deportista.getAltura(), Types.INTEGER);
+            pstmt.setBlob(5, deportista.getFoto());
+
+            return pstmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (connection != null) connection.CloseConexion();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public void update(Deportista deportista) throws SQLException {
-        String sql = "UPDATE Deportista SET nombre = ?, sexo = ?, peso = ?, altura = ?, foto = ? WHERE id_deportista = ?";
-        try (Connection connection = ConexionBBDD.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, deportista.getNombre());
-            stmt.setString(2, String.valueOf(deportista.getSexo()));
-            stmt.setObject(3, deportista.getPeso(), Types.INTEGER);
-            stmt.setObject(4, deportista.getAltura(), Types.INTEGER);
-            stmt.setBlob(5, deportista.getFoto());
-            stmt.setInt(6, deportista.getIdDeportista());
-            stmt.executeUpdate();
+    public static boolean updateDeportista(Deportista deportista) {
+        ConexionBBDD connection = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            connection = new ConexionBBDD();
+            pstmt = connection.getConnection().prepareStatement("UPDATE Deportista SET nombre = ?, sexo = ?, peso = ?, altura = ?, foto = ? WHERE id_deportista = ?");
+            pstmt.setString(1, deportista.getNombre());
+            pstmt.setString(2, String.valueOf(deportista.getSexo()));
+            pstmt.setObject(3, deportista.getPeso(), Types.INTEGER);
+            pstmt.setObject(4, deportista.getAltura(), Types.INTEGER);
+            pstmt.setBlob(5, deportista.getFoto());
+            pstmt.setInt(6, deportista.getIdDeportista());
+
+            return pstmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (connection != null) connection.CloseConexion();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
+
 
     public void delete(int id) throws SQLException {
         String sql = "DELETE FROM Deportista WHERE id_deportista = ?";
