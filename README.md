@@ -1,0 +1,1 @@
+Proyecto de olimpiadas. contiene una pantalla principal que permite gestionar la implementacion, edicion, y eliminacion de una serie de objetos relacionados con las olimpiadas, usando tablas relacionadas
