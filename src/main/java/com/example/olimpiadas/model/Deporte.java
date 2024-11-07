@@ -28,7 +28,7 @@ public class Deporte {
 
     @Override
     public String toString() {
-        return "Deporte{idDeporte=" + idDeporte + ", nombre='" + nombre + "'}";
+        return nombre;
     }
 
     @Override

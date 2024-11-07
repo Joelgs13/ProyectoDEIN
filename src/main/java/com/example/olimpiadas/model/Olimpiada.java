@@ -75,7 +75,7 @@ public class Olimpiada {
 
     @Override
     public String toString() {
-        return "Olimpiada{idOlimpiada=" + idOlimpiada + ", nombre='" + nombre + "', anio=" + anio + ", temporada='" + temporada + "', ciudad='" + ciudad + "'}";
+        return nombre;
     }
 
     @Override
