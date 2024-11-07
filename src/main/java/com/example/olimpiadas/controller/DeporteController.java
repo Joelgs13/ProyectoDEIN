@@ -16,7 +16,11 @@ public class DeporteController {
     private Stage stage;
     private Deporte deporte;
 
-    // Metodo para establecer el deporte a editar (en caso de que sea edición).
+    /**
+     * Metodo para establecer el deporte a editar (en caso de que sea edición).
+     *
+     * @param deporte El objeto {@link Deporte} que se va a editar.
+     */
     public void setDeporte(Deporte deporte) {
         this.deporte = deporte;
         if (deporte != null) {
@@ -24,11 +28,20 @@ public class DeporteController {
         }
     }
 
-    // Metodo para establecer el Stage (si es necesario para cerrar el modal desde este controlador).
+    /**
+     * Metodo para establecer el Stage (si es necesario para cerrar el modal desde este controlador).
+     *
+     * @param stage El objeto {@link Stage} de la ventana que se va a controlar.
+     */
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
+    /**
+     * Metodo que guarda los cambios realizados en el nombre del deporte.
+     * Si el campo está vacío o no se han realizado cambios, muestra un mensaje de error.
+     * Si el deporte es nuevo, lo agrega a la base de datos. Si es una edición, actualiza el deporte existente.
+     */
     @FXML
     public void guardar() {
         String nombre = txtNombre.getText().trim();
@@ -67,6 +80,11 @@ public class DeporteController {
         }
     }
 
+    /**
+     * Muestra un mensaje de error al usuario.
+     *
+     * @param mensaje El mensaje de error a mostrar.
+     */
     private void showError(String mensaje) {
         // Mostrar error al usuario
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -76,6 +94,11 @@ public class DeporteController {
         alert.showAndWait();
     }
 
+    /**
+     * Muestra un mensaje de confirmación al usuario.
+     *
+     * @param mensaje El mensaje de confirmación a mostrar.
+     */
     private void showConfirmation(String mensaje) {
         // Mostrar confirmación al usuario
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -85,7 +108,12 @@ public class DeporteController {
         alert.showAndWait();
     }
 
-    // Método para manejar el evento de cancelar
+    /**
+     * Metodo para manejar el evento de cancelar.
+     * Cierra la ventana modal si el stage no es null.
+     *
+     * @param event El evento de acción que dispara el metodo (no se utiliza en este caso).
+     */
     @FXML
     void cancelar(ActionEvent event) {
         if (stage != null) {
@@ -93,4 +121,3 @@ public class DeporteController {
         }
     }
 }
-

@@ -8,11 +8,20 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * La clase {@code EventoDAO} proporciona los métodos para interactuar con la base de datos
+ * relacionada con los objetos {@link Evento}. Permite realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar)
+ * para gestionar los eventos en la base de datos.
+ */
 public class EventoDAO {
 
+    /**
+     * Agrega un nuevo evento a la base de datos.
+     *
+     * @param evento El objeto {@link Evento} que se desea agregar a la base de datos.
+     * @return {@code true} si el evento fue agregado exitosamente, {@code false} en caso contrario.
+     */
     public static boolean addEvento(Evento evento) {
         ConexionBBDD connection = null;
         PreparedStatement pstmt = null;
@@ -39,7 +48,12 @@ public class EventoDAO {
         }
     }
 
-
+    /**
+     * Actualiza los datos de un evento en la base de datos.
+     *
+     * @param evento El objeto {@link Evento} con los nuevos valores que se desean actualizar.
+     * @return {@code true} si la actualización fue exitosa, {@code false} en caso contrario.
+     */
     public static boolean updateEvento(Evento evento) {
         ConexionBBDD connection = null;
         PreparedStatement pstmt = null;
@@ -67,7 +81,12 @@ public class EventoDAO {
         }
     }
 
-
+    /**
+     * Elimina un evento de la base de datos si no está asociado a ninguna participación.
+     *
+     * @param idEvento El id del evento que se desea eliminar.
+     * @return {@code true} si el evento fue eliminado exitosamente, {@code false} si está asociado a alguna participación.
+     */
     public static boolean deleteEvento(int idEvento) {
         ConexionBBDD connection = null;
         PreparedStatement pstmt = null;
@@ -113,8 +132,13 @@ public class EventoDAO {
         }
     }
 
-
-
+    /**
+     * Obtiene un evento por su id desde la base de datos.
+     *
+     * @param id El id del evento que se desea obtener.
+     * @return Un objeto {@link Evento} con los datos correspondientes, o {@code null} si no se encuentra el evento.
+     * @throws SQLException Si ocurre un error en la consulta a la base de datos.
+     */
     public static Evento getById(int id) throws SQLException {
         ConexionBBDD connection;
         Evento evento = null;
@@ -130,12 +154,12 @@ public class EventoDAO {
                 int id_olimpiada = rs.getInt("id_olimpiada");
                 int id_deporte = rs.getInt("id_deporte");
 
-                //Olimpiada
+                // Olimpiada
                 Olimpiada olimpiada = OlimpiadaDAO.getById(id_olimpiada);
-                //Deporte
+                // Deporte
                 Deporte deporte = DeporteDAO.getById(id_deporte);
 
-                evento = new Evento(id_evento,nombre,olimpiada,deporte);
+                evento = new Evento(id_evento, nombre, olimpiada, deporte);
             }
             rs.close();
             connection.CloseConexion();
@@ -145,10 +169,15 @@ public class EventoDAO {
         return evento;
     }
 
+    /**
+     * Obtiene todos los eventos registrados en la base de datos.
+     *
+     * @return Una lista observable de objetos {@link Evento} que representan todos los eventos.
+     */
     public static ObservableList<Evento> getAll() {
         ConexionBBDD connection;
         ObservableList<Evento> eventos = FXCollections.observableArrayList();
-        try{
+        try {
             connection = new ConexionBBDD();
             String consulta = "SELECT id_evento,nombre,id_olimpiada,id_deporte FROM Evento";
             PreparedStatement pstmt = connection.getConnection().prepareStatement(consulta);
@@ -159,17 +188,17 @@ public class EventoDAO {
                 int id_olimpiada = rs.getInt(3);
                 int id_deporte = rs.getInt(4);
 
-                //Olimpiada
+                // Olimpiada
                 Olimpiada olimpiada = OlimpiadaDAO.getById(id_olimpiada);
-                //Deporte
+                // Deporte
                 Deporte deporte = DeporteDAO.getById(id_deporte);
 
-                Evento evento = new Evento(id_evento,nombre,olimpiada,deporte);
+                Evento evento = new Evento(id_evento, nombre, olimpiada, deporte);
                 eventos.add(evento);
             }
             rs.close();
             connection.CloseConexion();
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
         return eventos;

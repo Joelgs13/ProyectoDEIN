@@ -9,11 +9,20 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * La clase {@code ParticipacionDAO} proporciona los métodos necesarios para interactuar con la base de datos
+ * en relación a las participaciones de los deportistas en eventos. Implementa operaciones CRUD (Crear, Leer, Actualizar, Eliminar)
+ * sobre las participaciones.
+ */
 public class ParticipacionDAO {
 
+    /**
+     * Agrega una nueva participación a la base de datos.
+     *
+     * @param participacion El objeto {@link Participacion} que se desea agregar a la base de datos.
+     * @return {@code true} si la participación fue agregada exitosamente, {@code false} en caso contrario.
+     */
     public static boolean addParticipacion(Participacion participacion) {
         ConexionBBDD connection = null;
         PreparedStatement pstmt = null;
@@ -43,7 +52,12 @@ public class ParticipacionDAO {
         }
     }
 
-    // Método para actualizar una participación
+    /**
+     * Actualiza una participación en la base de datos.
+     *
+     * @param participacion El objeto {@link Participacion} con los nuevos valores que se desean actualizar.
+     * @return {@code true} si la participación fue actualizada exitosamente, {@code false} en caso contrario.
+     */
     public static boolean updateParticipacion(Participacion participacion) {
         ConexionBBDD connection = null;
         PreparedStatement pstmt = null;
@@ -73,7 +87,13 @@ public class ParticipacionDAO {
         }
     }
 
-    // Metodo para eliminar una participación
+    /**
+     * Elimina una participación de la base de datos, dada la identificación del deportista y el evento.
+     *
+     * @param idDeportista El id del deportista cuya participación se quiere eliminar.
+     * @param idEvento El id del evento cuya participación se quiere eliminar.
+     * @return {@code true} si la participación fue eliminada exitosamente, {@code false} en caso contrario.
+     */
     public static boolean deleteParticipacion(int idDeportista, int idEvento) {
         ConexionBBDD connection = null;
         PreparedStatement pstmt = null;
@@ -100,12 +120,17 @@ public class ParticipacionDAO {
         }
     }
 
+    /**
+     * Obtiene todas las participaciones registradas en la base de datos.
+     *
+     * @return Una lista observable de objetos {@link Participacion} que representan todas las participaciones.
+     */
     public static ObservableList<Participacion> findAll() {
         ConexionBBDD connection;
         ObservableList<Participacion> participacions = FXCollections.observableArrayList();
-        try{
+        try {
             connection = new ConexionBBDD();
-            String consulta = "SELECT id_deportista,id_evento,id_equipo,edad,medalla FROM Participacion";
+            String consulta = "SELECT id_deportista, id_evento, id_equipo, edad, medalla FROM Participacion";
             PreparedStatement pstmt = connection.getConnection().prepareStatement(consulta);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -115,19 +140,19 @@ public class ParticipacionDAO {
                 int edad = rs.getInt(4);
                 String medalla = rs.getString(5);
 
-                //Deportista
+                // Recupera el objeto Deportista
                 Deportista deportista = DeportistaDAO.getById(id_deportista);
-                //Evento
+                // Recupera el objeto Evento
                 Evento evento = EventoDAO.getById(id_evento);
-                //Equipo
+                // Recupera el objeto Equipo
                 Equipo equipo = EquipoDAO.getById(id_equipo);
 
-                Participacion participacion = new Participacion(deportista,evento,equipo,edad,medalla);
+                Participacion participacion = new Participacion(deportista, evento, equipo, edad, medalla);
                 participacions.add(participacion);
             }
             rs.close();
             connection.CloseConexion();
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
         return participacions;

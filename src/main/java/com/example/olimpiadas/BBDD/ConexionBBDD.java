@@ -76,6 +76,13 @@ public class ConexionBBDD {
         return null;
     }
 
+    /**
+     * Cierra la conexión activa a la base de datos.
+     *
+     * @return La conexión cerrada, útil para otros procesos si se requiere.
+     * @throws SQLException Si ocurre un error al cerrar la conexión,
+     *                      por ejemplo, si la conexión ya está cerrada.
+     */
     public Connection CloseConexion() throws SQLException {
         connection.close();
         return connection;

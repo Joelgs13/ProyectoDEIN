@@ -37,15 +37,29 @@ public class ParticipacionController {
     private Stage stage;
     private Participacion participacion;
 
+    /**
+     * Inicializa la vista cargando los datos necesarios en las combinaciones de campos.
+     */
     @FXML
     public void initialize() {
         cargarDatos();
     }
 
+    /**
+     * Establece el stage de la ventana actual.
+     *
+     * @param stage El stage que representa la ventana.
+     */
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
+    /**
+     * Establece los valores de la participacion para su edición.
+     * Si la participacion no es {@code null}, se cargan los datos correspondientes.
+     *
+     * @param participacion El objeto {@link Participacion} que se desea editar.
+     */
     public void setParticipacion(Participacion participacion) {
         this.participacion = participacion;
         if (participacion != null) {
@@ -63,6 +77,9 @@ public class ParticipacionController {
         }
     }
 
+    /**
+     * Carga los datos de deportistas, equipos y eventos en las respectivas combinaciones de campos.
+     */
     public void cargarDatos() {
         List<Deportista> listaDeportistas = DeportistaDAO.findAll();
         List<Equipo> listaEquipos = EquipoDAO.findAll();
@@ -78,6 +95,11 @@ public class ParticipacionController {
         cbEvento.getItems().addAll(listaEventos);
     }
 
+    /**
+     * Cancela la operación actual y cierra la ventana de la aplicación.
+     *
+     * @param event El evento que dispara este metodo.
+     */
     @FXML
     void cancelar(ActionEvent event) {
         if (stage != null) {
@@ -85,6 +107,13 @@ public class ParticipacionController {
         }
     }
 
+    /**
+     * Guarda la participación en la base de datos. Si la participacion es {@code null}, crea una nueva.
+     * Si la participacion ya existe, actualiza los datos de la misma.
+     * Muestra mensajes de error o éxito según el resultado.
+     *
+     * @param event El evento que dispara este metodo.
+     */
     @FXML
     void guardar(ActionEvent event) {
         Deportista deportista = cbDeportista.getValue();
@@ -158,6 +187,11 @@ public class ParticipacionController {
         }
     }
 
+    /**
+     * Muestra un mensaje de error en una ventana emergente.
+     *
+     * @param mensaje El mensaje que se va a mostrar.
+     */
     private void showError(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -166,6 +200,11 @@ public class ParticipacionController {
         alert.showAndWait();
     }
 
+    /**
+     * Muestra un mensaje de éxito en una ventana emergente.
+     *
+     * @param mensaje El mensaje que se va a mostrar.
+     */
     private void showSuccess(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Éxito");

@@ -6,11 +6,20 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * La clase {@code EquipoDAO} proporciona los métodos para interactuar con la base de datos
+ * relacionada con los objetos {@link Equipo}. Permite realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar)
+ * para gestionar los equipos en la base de datos.
+ */
 public class EquipoDAO {
 
+    /**
+     * Agrega un nuevo equipo a la base de datos.
+     *
+     * @param equipo El objeto {@link Equipo} que se desea agregar a la base de datos.
+     * @return {@code true} si el equipo fue agregado exitosamente, {@code false} en caso contrario.
+     */
     public static boolean addEquipo(Equipo equipo) {
         ConexionBBDD connection = null;
         PreparedStatement pstmt = null;
@@ -36,7 +45,12 @@ public class EquipoDAO {
         }
     }
 
-
+    /**
+     * Actualiza los datos de un equipo en la base de datos.
+     *
+     * @param equipo El objeto {@link Equipo} con los nuevos valores que se desean actualizar.
+     * @return {@code true} si la actualización fue exitosa, {@code false} en caso contrario.
+     */
     public static boolean updateEquipo(Equipo equipo) {
         ConexionBBDD connection = null;
         PreparedStatement pstmt = null;
@@ -63,7 +77,12 @@ public class EquipoDAO {
         }
     }
 
-
+    /**
+     * Elimina un equipo de la base de datos si no está asociado a ninguna participación.
+     *
+     * @param idEquipo El id del equipo que se desea eliminar.
+     * @return {@code true} si el equipo fue eliminado exitosamente, {@code false} si está asociado a alguna participación.
+     */
     public static boolean deleteEquipo(int idEquipo) {
         ConexionBBDD connection = null;
         PreparedStatement pstmt = null;
@@ -109,9 +128,13 @@ public class EquipoDAO {
         }
     }
 
-
-
-    public static Equipo getById(int id)  {
+    /**
+     * Obtiene un equipo por su id desde la base de datos.
+     *
+     * @param id El id del equipo que se desea obtener.
+     * @return Un objeto {@link Equipo} con los datos correspondientes, o {@code null} si no se encuentra el equipo.
+     */
+    public static Equipo getById(int id) {
         ConexionBBDD connection;
         Equipo equipo = null;
         try {
@@ -124,7 +147,7 @@ public class EquipoDAO {
                 int id_equipo = rs.getInt(1);
                 String nombre = rs.getString(2);
                 String iniciales = rs.getString(3);
-                equipo = new Equipo(id_equipo,nombre,iniciales);
+                equipo = new Equipo(id_equipo, nombre, iniciales);
             }
             rs.close();
             connection.CloseConexion();
@@ -134,6 +157,11 @@ public class EquipoDAO {
         return equipo;
     }
 
+    /**
+     * Obtiene todos los equipos registrados en la base de datos.
+     *
+     * @return Una lista observable de objetos {@link Equipo} que representan todos los equipos.
+     */
     public static ObservableList<Equipo> findAll() {
         ConexionBBDD connection;
         ObservableList<Equipo> equipos = FXCollections.observableArrayList();

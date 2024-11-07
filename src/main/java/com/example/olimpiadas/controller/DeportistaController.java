@@ -41,10 +41,21 @@ public class DeportistaController {
     private Deportista deportista;
     private Blob foto; // Mantener la foto seleccionada en un Blob
 
+    /**
+     * Establece el stage de la ventana para permitir su cierre.
+     *
+     * @param stage El objeto {@link Stage} de la ventana que se va a controlar.
+     */
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
+    /**
+     * Establece el objeto deportista a editar (si existe).
+     * Si el deportista no es {@code null}, se llenan los campos con sus datos.
+     *
+     * @param deportista El objeto {@link Deportista} que se va a editar.
+     */
     public void setDeportista(Deportista deportista) {
         this.deportista = deportista;
 
@@ -66,6 +77,11 @@ public class DeportistaController {
         }
     }
 
+    /**
+     * Cancela la acción actual y cierra la ventana modal.
+     *
+     * @param event El evento de acción que dispara este {@code metodo}.
+     */
     @FXML
     void cancelar(ActionEvent event) {
         if (stage != null) {
@@ -73,6 +89,13 @@ public class DeportistaController {
         }
     }
 
+    /**
+     * Guarda los datos del deportista.
+     * Si el deportista no es {@code null}, actualiza sus datos en la base de datos,
+     * si es un nuevo deportista, lo agrega a la base de datos.
+     *
+     * @param event El evento de acción que dispara este {@code metodo}.
+     */
     @FXML
     void guardar(ActionEvent event) {
         // Validación de los campos requeridos
@@ -156,6 +179,12 @@ public class DeportistaController {
         }
     }
 
+    /**
+     * Permite seleccionar una foto para el deportista desde el sistema de archivos.
+     * La imagen seleccionada se carga en un {@link Blob}.
+     *
+     * @param event El evento de acción que dispara este {@code metodo}.
+     */
     @FXML
     void seleccionarFoto(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -173,6 +202,11 @@ public class DeportistaController {
         }
     }
 
+    /**
+     * Muestra un mensaje de error al usuario.
+     *
+     * @param mensaje El mensaje de error que se va a mostrar.
+     */
     private void showError(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -181,6 +215,11 @@ public class DeportistaController {
         alert.showAndWait();
     }
 
+    /**
+     * Muestra un mensaje de éxito al usuario.
+     *
+     * @param mensaje El mensaje de éxito que se va a mostrar.
+     */
     private void showSuccess(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Éxito");

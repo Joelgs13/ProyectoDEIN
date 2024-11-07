@@ -19,6 +19,12 @@ public class EquipoController {
     private Stage stage;
     private Equipo equipo;
 
+    /**
+     * Establece el equipo a editar.
+     * Si el equipo no es {@code null}, llena los campos con los datos del equipo.
+     *
+     * @param equipo El objeto {@link Equipo} que se va a editar.
+     */
     public void setEquipo(Equipo equipo) {
         this.equipo = equipo;
 
@@ -31,10 +37,20 @@ public class EquipoController {
         }
     }
 
+    /**
+     * Establece el stage para permitir su cierre.
+     *
+     * @param stage El objeto {@link Stage} de la ventana que se va a controlar.
+     */
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
+    /**
+     * Muestra un mensaje de error al usuario.
+     *
+     * @param mensaje El mensaje de error que se va a mostrar.
+     */
     private void showError(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -43,6 +59,11 @@ public class EquipoController {
         alert.showAndWait();
     }
 
+    /**
+     * Muestra un mensaje de éxito al usuario.
+     *
+     * @param mensaje El mensaje de éxito que se va a mostrar.
+     */
     private void showSuccess(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Éxito");
@@ -51,6 +72,11 @@ public class EquipoController {
         alert.showAndWait();
     }
 
+    /**
+     * Cancela la acción actual y cierra la ventana modal.
+     *
+     * @param event El evento de acción que dispara este {@code metodo}.
+     */
     @FXML
     void cancelar(ActionEvent event) {
         if (stage != null) {
@@ -58,6 +84,13 @@ public class EquipoController {
         }
     }
 
+    /**
+     * Guarda el equipo en la base de datos.
+     * Si el equipo no es {@code null}, actualiza sus datos; si es un nuevo equipo, lo agrega.
+     *
+     * @see EquipoDAO#addEquipo(Equipo)
+     * @see EquipoDAO#updateEquipo(Equipo)
+     */
     @FXML
     public void guardar() {
         String nombre = tfNombre.getText().trim();

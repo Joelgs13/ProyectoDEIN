@@ -6,11 +6,20 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * La clase {@code OlimpiadaDAO} proporciona los métodos para interactuar con la base de datos
+ * relacionada con los objetos {@link Olimpiada}. Permite realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar)
+ * para gestionar las olimpiadas en la base de datos.
+ */
 public class OlimpiadaDAO {
 
+    /**
+     * Agrega una nueva olimpiada a la base de datos.
+     *
+     * @param olimpiada El objeto {@link Olimpiada} que se desea agregar a la base de datos.
+     * @return {@code true} si la olimpiada fue agregada exitosamente, {@code false} en caso contrario.
+     */
     public static boolean addOlimpiada(Olimpiada olimpiada) {
         ConexionBBDD connection = null;
         PreparedStatement pstmt = null;
@@ -38,7 +47,12 @@ public class OlimpiadaDAO {
         }
     }
 
-
+    /**
+     * Actualiza los datos de una olimpiada en la base de datos.
+     *
+     * @param olimpiada El objeto {@link Olimpiada} con los nuevos valores que se desean actualizar.
+     * @return {@code true} si la actualización fue exitosa, {@code false} en caso contrario.
+     */
     public static boolean updateOlimpiada(Olimpiada olimpiada) {
         ConexionBBDD connection = null;
         PreparedStatement pstmt = null;
@@ -67,7 +81,12 @@ public class OlimpiadaDAO {
         }
     }
 
-
+    /**
+     * Elimina una olimpiada de la base de datos si no está asociada a ningún evento.
+     *
+     * @param idOlimpiada El id de la olimpiada que se desea eliminar.
+     * @return {@code true} si la olimpiada fue eliminada exitosamente, {@code false} si está asociada a algún evento.
+     */
     public static boolean deleteOlimpiada(int idOlimpiada) {
         ConexionBBDD connection = null;
         PreparedStatement pstmt = null;
@@ -113,8 +132,12 @@ public class OlimpiadaDAO {
         }
     }
 
-
-
+    /**
+     * Obtiene una olimpiada por su id desde la base de datos.
+     *
+     * @param id El id de la olimpiada que se desea obtener.
+     * @return Un objeto {@link Olimpiada} con los datos correspondientes, o {@code null} si no se encuentra la olimpiada.
+     */
     public static Olimpiada getById(int id) {
         ConexionBBDD connection;
         Olimpiada olimpiada = null;
@@ -130,7 +153,7 @@ public class OlimpiadaDAO {
                 int anio = rs.getInt(3);
                 String temporada = rs.getString(4);
                 String ciudad = rs.getString(5);
-                olimpiada = new Olimpiada(id_olimpiada,nombre,anio,temporada,ciudad);
+                olimpiada = new Olimpiada(id_olimpiada, nombre, anio, temporada, ciudad);
             }
             rs.close();
             connection.CloseConexion();
@@ -140,6 +163,11 @@ public class OlimpiadaDAO {
         return olimpiada;
     }
 
+    /**
+     * Obtiene todas las olimpiadas registradas en la base de datos.
+     *
+     * @return Una lista observable de objetos {@link Olimpiada} que representan todas las olimpiadas.
+     */
     public static ObservableList<Olimpiada> getAll()  {
         ConexionBBDD connection;
         ObservableList<Olimpiada> olimpiadas = FXCollections.observableArrayList();

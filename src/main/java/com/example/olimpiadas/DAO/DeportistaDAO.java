@@ -11,6 +11,12 @@ import java.util.List;
 
 public class DeportistaDAO {
 
+    /**
+     * Agrega un nuevo deportista a la base de datos.
+     *
+     * @param deportista El objeto {@link Deportista} que se desea agregar a la base de datos.
+     * @return {@code true} si el deportista fue agregado exitosamente, {@code false} en caso contrario.
+     */
     public static boolean addDeportista(Deportista deportista) {
         ConexionBBDD connection = null;
         PreparedStatement pstmt = null;
@@ -39,6 +45,12 @@ public class DeportistaDAO {
         }
     }
 
+    /**
+     * Actualiza los datos de un deportista en la base de datos.
+     *
+     * @param deportista El objeto {@link Deportista} con los nuevos valores que se desean actualizar.
+     * @return {@code true} si la actualización fue exitosa, {@code false} en caso contrario.
+     */
     public static boolean updateDeportista(Deportista deportista) {
         ConexionBBDD connection = null;
         PreparedStatement pstmt = null;
@@ -68,7 +80,12 @@ public class DeportistaDAO {
         }
     }
 
-
+    /**
+     * Elimina un deportista de la base de datos si no está asociado a ninguna participación.
+     *
+     * @param idDeportista El id del deportista que se desea eliminar.
+     * @return {@code true} si el deportista fue eliminado exitosamente, {@code false} si está asociado a alguna participación.
+     */
     public static boolean deleteDeportista(int idDeportista) {
         ConexionBBDD connection = null;
         PreparedStatement pstmt = null;
@@ -114,8 +131,13 @@ public class DeportistaDAO {
         }
     }
 
-
-
+    /**
+     * Obtiene un deportista por su id desde la base de datos.
+     *
+     * @param id El id del deportista que se desea obtener.
+     * @return Un objeto {@link Deportista} con los datos correspondientes, o {@code null} si no se encuentra el deportista.
+     * @throws SQLException Si ocurre un error al ejecutar la consulta en la base de datos.
+     */
     public static Deportista getById(int id) throws SQLException {
         ConexionBBDD connection;
         Deportista deportista = null;
@@ -142,6 +164,11 @@ public class DeportistaDAO {
         return deportista;
     }
 
+    /**
+     * Obtiene todos los deportistas registrados en la base de datos.
+     *
+     * @return Una lista observable de objetos {@link Deportista} que representan todos los deportistas.
+     */
     public static ObservableList<Deportista> findAll() {
         ConexionBBDD connection;
         ObservableList<Deportista> deportistas = FXCollections.observableArrayList();

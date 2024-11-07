@@ -29,6 +29,12 @@ public class EventoController {
     private Stage stage;
     private Evento evento;
 
+    /**
+     * Establece el evento a editar.
+     * Si el evento no es {@code null}, llena los campos con los datos del evento.
+     *
+     * @param evento El objeto {@link Evento} que se va a editar.
+     */
     public void setEvento(Evento evento) {
         this.evento = evento;
         if (evento != null) {
@@ -38,10 +44,18 @@ public class EventoController {
         }
     }
 
+    /**
+     * Establece el stage para permitir su cierre.
+     *
+     * @param stage El objeto {@link Stage} de la ventana que se va a controlar.
+     */
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
+    /**
+     * Carga los datos necesarios para llenar los {@link ComboBox} de Deporte y Olimpiada.
+     */
     public void cargarDatos() {
         List<Deporte> listaDeportes = DeporteDAO.findAll();
         List<Olimpiada> listaOlimpiadas = OlimpiadaDAO.getAll();
@@ -53,6 +67,13 @@ public class EventoController {
         cbOlimpiada.getItems().addAll(listaOlimpiadas);
     }
 
+    /**
+     * Guarda el evento en la base de datos.
+     * Si el evento no es {@code null}, actualiza sus datos; si es un nuevo evento, lo agrega.
+     *
+     * @see EventoDAO#addEvento(Evento)
+     * @see EventoDAO#updateEvento(Evento)
+     */
     @FXML
     public void guardar() {
         String nombre = tfNombre.getText().trim();
@@ -101,6 +122,11 @@ public class EventoController {
         }
     }
 
+    /**
+     * Muestra un mensaje de error al usuario.
+     *
+     * @param mensaje El mensaje de error que se va a mostrar.
+     */
     private void showError(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -109,6 +135,11 @@ public class EventoController {
         alert.showAndWait();
     }
 
+    /**
+     * Muestra un mensaje de éxito al usuario.
+     *
+     * @param mensaje El mensaje de éxito que se va a mostrar.
+     */
     private void showSuccess(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Éxito");
@@ -117,6 +148,11 @@ public class EventoController {
         alert.showAndWait();
     }
 
+    /**
+     * Cancela la acción actual y cierra la ventana modal.
+     *
+     * @param event El evento de acción que dispara este metodo.
+     */
     @FXML
     void cancelar(ActionEvent event) {
         if (stage != null) {
@@ -124,6 +160,9 @@ public class EventoController {
         }
     }
 
+    /**
+     * Inicializa los datos del controlador cargando los elementos de los {@link ComboBox}.
+     */
     @FXML
     public void initialize() {
         cargarDatos();

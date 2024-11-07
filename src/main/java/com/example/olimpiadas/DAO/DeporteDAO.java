@@ -9,6 +9,12 @@ import java.sql.*;
 
 public class DeporteDAO {
 
+    /**
+     * Agrega un nuevo deporte a la base de datos.
+     *
+     * @param d El objeto {@link Deporte} que se desea agregar a la base de datos.
+     * @return {@code true} si el deporte se agregó exitosamente, {@code false} en caso contrario.
+     */
     public static boolean addDeporte(Deporte d) {
         ConexionBBDD connection = null;
         PreparedStatement pstmt = null;
@@ -33,8 +39,12 @@ public class DeporteDAO {
         }
     }
 
-
-
+    /**
+     * Actualiza un deporte existente en la base de datos.
+     *
+     * @param d El objeto {@link Deporte} con los nuevos valores que se desean actualizar en la base de datos.
+     * @return {@code true} si el deporte se actualizó exitosamente, {@code false} en caso contrario.
+     */
     public static boolean updateDeporte(Deporte d) {
         ConexionBBDD connection = null;
         PreparedStatement pstmt = null;
@@ -60,7 +70,12 @@ public class DeporteDAO {
         }
     }
 
-
+    /**
+     * Elimina un deporte de la base de datos si no está asociado a ningún evento.
+     *
+     * @param idDeporte El id del deporte a eliminar.
+     * @return {@code true} si el deporte fue eliminado exitosamente, {@code false} si no se puede eliminar (por estar asociado a un evento).
+     */
     public static boolean deleteDeporte(int idDeporte) {
         ConexionBBDD connection = null;
         PreparedStatement pstmt = null;
@@ -106,8 +121,12 @@ public class DeporteDAO {
         }
     }
 
-
-
+    /**
+     * Obtiene un deporte por su id desde la base de datos.
+     *
+     * @param id El id del deporte que se desea obtener.
+     * @return Un objeto {@link Deporte} con los datos correspondientes, o {@code null} si no se encuentra el deporte.
+     */
     public static Deporte getById(int id) {
         ConexionBBDD connection;
         Deporte deporte = null;
@@ -130,6 +149,11 @@ public class DeporteDAO {
         return deporte;
     }
 
+    /**
+     * Obtiene todos los deportes registrados en la base de datos.
+     *
+     * @return Una lista observable de objetos {@link Deporte} que representan todos los deportes.
+     */
     public static ObservableList<Deporte> findAll() {
         ConexionBBDD connection;
         ObservableList<Deporte> deportes = FXCollections.observableArrayList();
