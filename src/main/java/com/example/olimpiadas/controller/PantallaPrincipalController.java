@@ -20,6 +20,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -114,6 +115,7 @@ public class PantallaPrincipalController {
         cbTablaElegida.getSelectionModel().selectFirst(); // Selecciona el primer elemento por defecto
         generarDeportes();
         configurarDobleClicTabla();
+        configurarEscapeTecla();
     }
 
 
@@ -145,6 +147,34 @@ public class PantallaPrincipalController {
             editarParticipacion(null);
         } else {
             showError("Tipo de objeto no soportado para edición.");
+        }
+    }
+
+    private void configurarEscapeTecla() {
+        tabla.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE && tabla.getSelectionModel().getSelectedItem() != null) {
+                Object objetoSeleccionado = tabla.getSelectionModel().getSelectedItem();
+                manejarEliminar(objetoSeleccionado);
+            }
+        });
+    }
+
+    // Método para manejar la eliminación del objeto seleccionado
+    private void manejarEliminar(Object objeto) {
+        if (objeto instanceof Deporte) {
+            borrarDeporte(null);
+        } else if (objeto instanceof Deportista) {
+            borrarDeportista(null);
+        } else if (objeto instanceof Evento) {
+            borrarEvento(null);
+        } else if (objeto instanceof Equipo) {
+            borrarEquipo(null);
+        } else if (objeto instanceof Olimpiada) {
+            borrarOlimpiada(null);
+        } else if (objeto instanceof Participacion) {
+            borrarParticipacion(null);
+        } else {
+            showError("Tipo de objeto no soportado para eliminación.");
         }
     }
 
