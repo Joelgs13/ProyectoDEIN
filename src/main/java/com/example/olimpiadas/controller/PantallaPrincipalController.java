@@ -203,8 +203,32 @@ public class PantallaPrincipalController {
 
     @FXML
     void aniadirEvento(ActionEvent event) {
+        try {
+            // Cargar el FXML de la ventana modal para Evento
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/olimpiadas/fxml/evento.fxml"));
+            Parent root = loader.load();
 
+            // Obtener el controlador de la ventana modal
+            EventoController controller = loader.getController();
+
+            // Pasar el stage de la ventana principal al controlador modal
+            Stage stage = new Stage();
+            controller.setStage(stage);
+
+            // Crear y mostrar la escena
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Agregar Evento");
+            stage.showAndWait();
+
+            // Actualizar la tabla o cualquier otra vista después de la acción
+            cambiarDeTabla(null);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     @FXML
     void aniadirOlimpiada(ActionEvent event) {
@@ -385,8 +409,51 @@ public class PantallaPrincipalController {
 
     @FXML
     void borrarEvento(ActionEvent event) {
+        if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Eventos")) {
+            Evento eventoSeleccionado = (Evento) tabla.getSelectionModel().getSelectedItem();
 
+            if (eventoSeleccionado != null) {
+                // Confirmar la eliminación
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmar Eliminación");
+                alert.setHeaderText(null);
+                alert.setContentText("¿Estás seguro de que quieres eliminar este evento?");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    boolean exito = EventoDAO.deleteEvento(eventoSeleccionado.getIdEvento());
+                    if (exito) {
+                        // Actualizar la tabla después de eliminar
+                        cambiarDeTabla(null);
+                        Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                        successAlert.setTitle("Éxito");
+                        successAlert.setHeaderText(null);
+                        successAlert.setContentText("El evento ha sido eliminado.");
+                        successAlert.showAndWait();
+                    } else {
+                        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                        errorAlert.setTitle("Error");
+                        errorAlert.setHeaderText(null);
+                        errorAlert.setContentText("No se pudo eliminar el evento.");
+                        errorAlert.showAndWait();
+                    }
+                }
+            } else {
+                Alert warningAlert = new Alert(Alert.AlertType.WARNING);
+                warningAlert.setTitle("Advertencia");
+                warningAlert.setHeaderText(null);
+                warningAlert.setContentText("Por favor, selecciona un evento para eliminar.");
+                warningAlert.showAndWait();
+            }
+        } else {
+            Alert warningAlert = new Alert(Alert.AlertType.WARNING);
+            warningAlert.setTitle("Advertencia");
+            warningAlert.setHeaderText(null);
+            warningAlert.setContentText("Por favor, selecciona un objeto evento.");
+            warningAlert.showAndWait();
+        }
     }
+
 
     @FXML
     void borrarOlimpiada(ActionEvent event) {
@@ -597,8 +664,53 @@ public class PantallaPrincipalController {
 
     @FXML
     void editarEvento(ActionEvent event) {
+        // Verificar que la tabla seleccionada es de Eventos
+        if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Eventos")) {
+            Evento eventoSeleccionado = (Evento) tabla.getSelectionModel().getSelectedItem();
 
+            if (eventoSeleccionado != null) {
+                try {
+                    // Cargar el FXML de la ventana modal para editar el evento
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/olimpiadas/fxml/evento.fxml"));
+                    Parent root = loader.load();
+
+                    // Obtener el controlador de la ventana modal
+                    EventoController controller = loader.getController();
+
+                    // Pasar el evento seleccionado al controlador para editar
+                    controller.setEvento(eventoSeleccionado);
+
+                    // Pasar el stage de la ventana principal al controlador modal
+                    Stage stage = new Stage();
+                    controller.setStage(stage);
+
+                    // Crear y mostrar la escena
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.setTitle("Editar Evento");
+                    stage.showAndWait();
+
+                    cambiarDeTabla(null); // Actualizar la tabla después de la edición
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                // Mostrar mensaje si no se ha seleccionado un evento
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Advertencia");
+                alert.setHeaderText(null);
+                alert.setContentText("Por favor, seleccione un evento para editar.");
+                alert.showAndWait();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Advertencia");
+            alert.setHeaderText(null);
+            alert.setContentText("Por favor, seleccione un evento.");
+            alert.showAndWait();
+        }
     }
+
 
     @FXML
     void editarOlimpiada(ActionEvent event) {
