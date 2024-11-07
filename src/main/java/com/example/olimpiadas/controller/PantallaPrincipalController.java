@@ -113,8 +113,48 @@ public class PantallaPrincipalController {
         cbTablaElegida.setItems(tablas);
         cbTablaElegida.getSelectionModel().selectFirst(); // Selecciona el primer elemento por defecto
         generarDeportes();
+        configurarDobleClicTabla();
     }
 
+
+    private void configurarDobleClicTabla() {
+        tabla.setRowFactory(tv -> {
+            TableRow<Object> fila = new TableRow<>();
+            fila.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !fila.isEmpty()) {
+                    Object objetoSeleccionado = fila.getItem();
+                    manejarDobleClic(objetoSeleccionado);
+                }
+            });
+            return fila;
+        });
+    }
+
+    private void manejarDobleClic(Object objeto) {
+        if (objeto instanceof Deporte) {
+            editarDeporte(null);
+        } else if (objeto instanceof Deportista) {
+            editarDeportista(null);
+        } else if (objeto instanceof Evento) {
+            editarEvento(null);
+        } else if (objeto instanceof Equipo) {
+            editarEquipo(null);
+        } else if (objeto instanceof Olimpiada) {
+            editarOlimpiada(null);
+        } else if (objeto instanceof Participacion) {
+            editarParticipacion(null);
+        } else {
+            showError("Tipo de objeto no soportado para edición.");
+        }
+    }
+
+    private void showError(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
 
     // Método que abre la ventana de deportes (en el controlador principal)
     @FXML
