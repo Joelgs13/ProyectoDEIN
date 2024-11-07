@@ -61,16 +61,37 @@ public class DeporteDAO {
     }
 
 
-    public static boolean deleteDeporte(int id) {
+    public static boolean deleteDeporte(int idDeporte) {
         ConexionBBDD connection = null;
         PreparedStatement pstmt = null;
 
         try {
+            // Establecer la conexión
             connection = new ConexionBBDD();
-            pstmt = connection.getConnection().prepareStatement("DELETE FROM Deporte WHERE id_deporte = ?");
-            pstmt.setInt(1, id);
 
-            return pstmt.executeUpdate() > 0;  // Retorna true si se eliminó al menos un registro
+            // Comprobar si el deporte está asociado a algún evento (similar al código original)
+            String consulta = "SELECT count(*) as cont FROM Evento WHERE id_deporte = ?";
+            pstmt = connection.getConnection().prepareStatement(consulta);
+            pstmt.setInt(1, idDeporte);
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                int cont = rs.getInt("cont");
+                rs.close();
+
+                if (cont > 0) {
+                    // Si hay eventos asociados, no se puede eliminar el deporte
+                    return false;
+                }
+            }
+
+            // Eliminar el deporte de la base de datos si no hay eventos asociados
+            String deleteQuery = "DELETE FROM Deporte WHERE id_deporte = ?";
+            pstmt = connection.getConnection().prepareStatement(deleteQuery);
+            pstmt.setInt(1, idDeporte);
+
+            // Ejecutar la eliminación
+            return pstmt.executeUpdate() > 0;  // Retorna true si la eliminación fue exitosa
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -84,6 +105,7 @@ public class DeporteDAO {
             }
         }
     }
+
 
 
     public static Deporte getById(int id) {
