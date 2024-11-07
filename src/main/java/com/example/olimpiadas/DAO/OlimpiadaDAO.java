@@ -73,10 +73,31 @@ public class OlimpiadaDAO {
         PreparedStatement pstmt = null;
 
         try {
+            // Establecer la conexión
             connection = new ConexionBBDD();
-            pstmt = connection.getConnection().prepareStatement("DELETE FROM Olimpiada WHERE id_olimpiada = ?");
+
+            // Comprobar si la olimpiada está asociada a algún evento
+            String consulta = "SELECT count(*) as cont FROM Evento WHERE id_olimpiada = ?";
+            pstmt = connection.getConnection().prepareStatement(consulta);
             pstmt.setInt(1, idOlimpiada);
 
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                int cont = rs.getInt("cont");
+                rs.close();
+
+                if (cont > 0) {
+                    // Si la olimpiada está asociada a algún evento, no se puede eliminar
+                    return false;
+                }
+            }
+
+            // Eliminar la olimpiada de la base de datos si no tiene eventos asociados
+            String deleteQuery = "DELETE FROM Olimpiada WHERE id_olimpiada = ?";
+            pstmt = connection.getConnection().prepareStatement(deleteQuery);
+            pstmt.setInt(1, idOlimpiada);
+
+            // Ejecutar la eliminación
             return pstmt.executeUpdate() > 0;  // Retorna true si la eliminación fue exitosa
 
         } catch (SQLException e) {
@@ -91,6 +112,7 @@ public class OlimpiadaDAO {
             }
         }
     }
+
 
 
     public static Olimpiada getById(int id) {
