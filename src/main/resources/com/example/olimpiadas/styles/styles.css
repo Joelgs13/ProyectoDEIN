@@ -1,6 +1,11 @@
 /* estilos.css */
 
-/* Aplicar un fondo claro a todo el GridPane */
+/* Fondo azul cielo para toda la aplicación */
+.root {
+    -fx-background-color: #87CEEB;  /* Azul cielo */
+}
+
+/* Estilo general para el GridPane */
 .grid-pane {
     -fx-background-color: #f4f4f4;
     -fx-padding: 20px;
@@ -8,18 +13,21 @@
     -fx-border-width: 1px;
 }
 
-/* Título principal */
+/* Títulos generales */
 .label {
     -fx-font-size: 14px;
     -fx-text-fill: #333;
     -fx-font-family: "Arial";
+    -fx-font-style: italic; /* Cursiva */
+    -fx-font-weight: bold;  /* Negrita */
 }
 
-/* Estilo de título de la interfaz */
+/* Título principal */
 .label[fx:id="titleLabel"] {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
-    -fx-text-fill: #4a90e2;
+    -fx-font-style: italic; /* Cursiva */
+    -fx-text-fill: #4a90e2; /* Azul brillante */
 }
 
 /* Cuadros de texto */
@@ -29,9 +37,10 @@
     -fx-border-radius: 4px;
     -fx-background-radius: 4px;
     -fx-background-color: #fff;
+    -fx-font-size: 14px;
 }
 
-/* Botones */
+/* Estilo para los botones */
 .button {
     -fx-background-color: #4a90e2;
     -fx-text-fill: #fff;
@@ -39,6 +48,7 @@
     -fx-padding: 8px 15px;
     -fx-background-radius: 4px;
     -fx-border-radius: 4px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.5, 0, 3);  /* Sombra sutil */
 }
 
 .button:hover {
@@ -50,6 +60,38 @@
     -fx-text-fill: #333;
 }
 
-.root {
-    -fx-background-color: #e0e0e0;  /* Un gris claro */
+/* Tabla */
+.table-view {
+    -fx-border-color: #ddd;
+    -fx-border-width: 1px;
+}
+
+/* Cambiar el color de la fila seleccionada en el TableView a un gris fuerte */
+.table-view .table-row-cell:selected {
+    -fx-background-color: #616161;  /* Gris fuerte */
+    -fx-text-fill: #FFFFFF;  /* Texto blanco para contraste */
+}
+
+/* Estilo de la fila al pasar el ratón sobre ella */
+.table-view .table-row-cell:hover {
+    -fx-background-color: #f1f1f1;  /* Fondo gris claro cuando el mouse pasa sobre la fila */
+}
+
+/* Títulos de columnas en la tabla */
+.table-view .column-header {
+    -fx-background-color: #f4f4f4;
+    -fx-text-fill: #333;
+    -fx-font-weight: bold;
+}
+
+/* Mejorar apariencia del borde y fondo de la tabla */
+.table-cell {
+    -fx-border-color: #ddd;
+    -fx-border-width: 0 0 1px 0;
+}
+
+/* Para una mejor visibilidad, cambia el color de las celdas al estar seleccionadas */
+.table-cell:selected {
+    -fx-background-color: #FFEB3B;  /* Amarillo fosforito */
+    -fx-text-fill: #000000;  /* Texto negro para contraste */
 }
