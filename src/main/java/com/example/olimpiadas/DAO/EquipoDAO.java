@@ -64,16 +64,37 @@ public class EquipoDAO {
     }
 
 
-    public static boolean deleteEquipo(int id) {
+    public static boolean deleteEquipo(int idEquipo) {
         ConexionBBDD connection = null;
         PreparedStatement pstmt = null;
 
         try {
+            // Establecer la conexión
             connection = new ConexionBBDD();
-            pstmt = connection.getConnection().prepareStatement("DELETE FROM Equipo WHERE id_equipo = ?");
-            pstmt.setInt(1, id);
 
-            return pstmt.executeUpdate() > 0;  // Retorna true si se eliminó al menos un registro
+            // Comprobar si el equipo está asociado a alguna participación
+            String consulta = "SELECT count(*) as cont FROM Participacion WHERE id_equipo = ?";
+            pstmt = connection.getConnection().prepareStatement(consulta);
+            pstmt.setInt(1, idEquipo);
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                int cont = rs.getInt("cont");
+                rs.close();
+
+                if (cont > 0) {
+                    // Si el equipo está asociado a alguna participación, no se puede eliminar
+                    return false;
+                }
+            }
+
+            // Eliminar el equipo de la base de datos si no tiene participaciones asociadas
+            String deleteQuery = "DELETE FROM Equipo WHERE id_equipo = ?";
+            pstmt = connection.getConnection().prepareStatement(deleteQuery);
+            pstmt.setInt(1, idEquipo);
+
+            // Ejecutar la eliminación
+            return pstmt.executeUpdate() > 0;  // Retorna true si la eliminación fue exitosa
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -87,6 +108,7 @@ public class EquipoDAO {
             }
         }
     }
+
 
 
     public static Equipo getById(int id)  {
