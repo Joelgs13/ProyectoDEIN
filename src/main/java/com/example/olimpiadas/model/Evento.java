@@ -46,34 +46,32 @@ public class Evento {
     public void setDeporte(Deporte deporte) {
         this.deporte = deporte;
     }
+
     @Override
     public boolean equals(Object o) {
+        // Verifica si ambos objetos son el mismo
         if (this == o) return true;
+
+        // Verifica si el objeto es una instancia válida de Evento
         if (o == null || getClass() != o.getClass()) return false;
+
+        // Realiza una conversión explícita a Evento
         Evento evento = (Evento) o;
-        return idEvento == evento.idEvento &&
-                (nombre != null ? nombre.equals(evento.nombre) : evento.nombre == null) &&
-                (olimpiada != null ? olimpiada.equals(evento.olimpiada) : evento.olimpiada == null) &&
-                (deporte != null ? deporte.equals(evento.deporte) : evento.deporte == null);
+
+        // Compara los atributos clave (en este caso, idEvento)
+        return idEvento == evento.idEvento;
     }
 
     @Override
     public int hashCode() {
-        int result = Integer.hashCode(idEvento);
-        result = 31 * result + (nombre != null ? nombre.hashCode() : 0);
-        result = 31 * result + (olimpiada != null ? olimpiada.hashCode() : 0);
-        result = 31 * result + (deporte != null ? deporte.hashCode() : 0);
-        return result;
+        // Usa idEvento para calcular el valor de hash
+        return Integer.hashCode(idEvento);
     }
+
 
     @Override
     public String toString() {
-        return "Evento{" +
-                "idEvento=" + idEvento +
-                ", nombre='" + nombre + '\'' +
-                ", olimpiada=" + (olimpiada != null ? olimpiada.getNombre() : "null") +
-                ", deporte=" + (deporte != null ? deporte.getNombre() : "null") +
-                '}';
+        return nombre;
     }
 
 }

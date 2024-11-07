@@ -14,6 +14,91 @@ import java.util.List;
 
 public class ParticipacionDAO {
 
+    public static boolean addParticipacion(Participacion participacion) {
+        ConexionBBDD connection = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            connection = new ConexionBBDD();
+            String consulta = "INSERT INTO Participacion (id_deportista, id_evento, id_equipo, edad, medalla) VALUES (?, ?, ?, ?, ?)";
+            pstmt = connection.getConnection().prepareStatement(consulta);
+            pstmt.setInt(1, participacion.getDeportista().getIdDeportista());
+            pstmt.setInt(2, participacion.getEvento().getIdEvento());
+            pstmt.setInt(3, participacion.getEquipo().getIdEquipo());
+            pstmt.setInt(4, participacion.getEdad());
+            pstmt.setString(5, participacion.getMedalla());
+
+            return pstmt.executeUpdate() > 0;  // Retorna true si se insertó correctamente
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;  // Retorna false en caso de error
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (connection != null) connection.CloseConexion();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Método para actualizar una participación
+    public static boolean updateParticipacion(Participacion participacion) {
+        ConexionBBDD connection = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            connection = new ConexionBBDD();
+            String consulta = "UPDATE Participacion SET id_equipo = ?, edad = ?, medalla = ? WHERE id_deportista = ? AND id_evento = ?";
+            pstmt = connection.getConnection().prepareStatement(consulta);
+            pstmt.setInt(1, participacion.getEquipo().getIdEquipo());
+            pstmt.setInt(2, participacion.getEdad());
+            pstmt.setString(3, participacion.getMedalla());
+            pstmt.setInt(4, participacion.getDeportista().getIdDeportista());
+            pstmt.setInt(5, participacion.getEvento().getIdEvento());
+
+            return pstmt.executeUpdate() > 0;  // Retorna true si se actualizó correctamente
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;  // Retorna false en caso de error
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (connection != null) connection.CloseConexion();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Metodo para eliminar una participación
+    public static boolean deleteParticipacion(int idDeportista, int idEvento) {
+        ConexionBBDD connection = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            connection = new ConexionBBDD();
+            String consulta = "DELETE FROM Participacion WHERE id_deportista = ? AND id_evento = ?";
+            pstmt = connection.getConnection().prepareStatement(consulta);
+            pstmt.setInt(1, idDeportista);
+            pstmt.setInt(2, idEvento);
+
+            return pstmt.executeUpdate() > 0;  // Retorna true si se eliminó al menos un registro
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;  // Retorna false en caso de error
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (connection != null) connection.CloseConexion();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public static ObservableList<Participacion> findAll() {
         ConexionBBDD connection;

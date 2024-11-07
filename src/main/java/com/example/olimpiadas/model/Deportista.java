@@ -73,7 +73,7 @@ public class Deportista {
 
     @Override
     public String toString() {
-        return "Deportista{idDeportista=" + idDeportista + ", nombre='" + nombre + "', sexo=" + sexo + ", peso=" + peso + ", altura=" + altura + "}";
+        return nombre;
     }
 
     public enum Genero {
@@ -88,6 +88,15 @@ public class Deportista {
         }
         return null;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Deportista deportista = (Deportista) o;
+        return idDeportista == deportista.idDeportista;
+    }
+
 
     @Override
     public int hashCode() {

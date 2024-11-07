@@ -261,8 +261,32 @@ public class PantallaPrincipalController {
 
     @FXML
     void aniadirParticipacion(ActionEvent event) {
+        try {
+            // Cargar el FXML de la ventana modal para Participación
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/olimpiadas/fxml/participacion.fxml"));
+            Parent root = loader.load();
 
+            // Obtener el controlador de la ventana modal
+            ParticipacionController controller = loader.getController();
+
+            // Pasar el stage de la ventana principal al controlador modal
+            Stage stage = new Stage();
+            controller.setStage(stage);
+
+            // Crear y mostrar la escena
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Agregar Participación");
+            stage.showAndWait();
+
+            // Actualizar la tabla o cualquier otra vista después de la acción
+            cambiarDeTabla(null);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     @FXML
     void borrarDeporte(ActionEvent event) {
@@ -509,8 +533,54 @@ public class PantallaPrincipalController {
 
     @FXML
     void borrarParticipacion(ActionEvent event) {
+        if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Participaciones")) {
+            Participacion participacionSeleccionada = (Participacion) tabla.getSelectionModel().getSelectedItem();
 
+            if (participacionSeleccionada != null) {
+                // Confirmar la eliminación
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmar Eliminación");
+                alert.setHeaderText(null);
+                alert.setContentText("¿Estás seguro de que quieres eliminar esta participación?");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    boolean exito = ParticipacionDAO.deleteParticipacion(
+                            participacionSeleccionada.getDeportista().getIdDeportista(),
+                            participacionSeleccionada.getEvento().getIdEvento()
+                    );
+                    if (exito) {
+                        // Actualizar la tabla después de eliminar
+                        cambiarDeTabla(null);
+                        Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                        successAlert.setTitle("Éxito");
+                        successAlert.setHeaderText(null);
+                        successAlert.setContentText("La participación ha sido eliminada.");
+                        successAlert.showAndWait();
+                    } else {
+                        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                        errorAlert.setTitle("Error");
+                        errorAlert.setHeaderText(null);
+                        errorAlert.setContentText("No se pudo eliminar la participación.");
+                        errorAlert.showAndWait();
+                    }
+                }
+            } else {
+                Alert warningAlert = new Alert(Alert.AlertType.WARNING);
+                warningAlert.setTitle("Advertencia");
+                warningAlert.setHeaderText(null);
+                warningAlert.setContentText("Por favor, selecciona una participación para eliminar.");
+                warningAlert.showAndWait();
+            }
+        } else {
+            Alert warningAlert = new Alert(Alert.AlertType.WARNING);
+            warningAlert.setTitle("Advertencia");
+            warningAlert.setHeaderText(null);
+            warningAlert.setContentText("Por favor, selecciona un objeto participación.");
+            warningAlert.showAndWait();
+        }
     }
+
 
     @FXML
     void editarDeporte(ActionEvent event) {
@@ -765,8 +835,53 @@ public class PantallaPrincipalController {
 
     @FXML
     void editarParticipacion(ActionEvent event) {
+        // Verificar que la tabla seleccionada es de Participaciones
+        if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Participaciones")) {
+            Participacion participacionSeleccionada = (Participacion) tabla.getSelectionModel().getSelectedItem();
 
+            if (participacionSeleccionada != null) {
+                try {
+                    // Cargar el FXML de la ventana modal para editar la participación
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/olimpiadas/fxml/participacion.fxml"));
+                    Parent root = loader.load();
+
+                    // Obtener el controlador de la ventana modal
+                    ParticipacionController controller = loader.getController();
+
+                    // Pasar la participación seleccionada al controlador para editar
+                    controller.setParticipacion(participacionSeleccionada);
+
+                    // Pasar el stage de la ventana principal al controlador modal
+                    Stage stage = new Stage();
+                    controller.setStage(stage);
+
+                    // Crear y mostrar la escena
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.setTitle("Editar Participación");
+                    stage.showAndWait();
+
+                    cambiarDeTabla(null); // Actualizar la tabla después de la edición
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                // Mostrar mensaje si no se ha seleccionado una participación
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Advertencia");
+                alert.setHeaderText(null);
+                alert.setContentText("Por favor, selecciona una participación para editar.");
+                alert.showAndWait();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Advertencia");
+            alert.setHeaderText(null);
+            alert.setContentText("Por favor, selecciona una participación.");
+            alert.showAndWait();
+        }
     }
+
 
     @FXML
     void filtrar(KeyEvent event) {
