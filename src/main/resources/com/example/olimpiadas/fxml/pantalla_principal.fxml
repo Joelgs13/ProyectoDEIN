@@ -103,7 +103,10 @@
       </HBox>
       <StackPane prefHeight="501.0" prefWidth="962.0">
          <children>
-            <TableView fx:id="tabla" prefHeight="434.0" prefWidth="962.0" />
+            <TableView fx:id="tabla" prefHeight="434.0" prefWidth="962.0">
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy></TableView>
          </children>
       </StackPane>
    </children>
