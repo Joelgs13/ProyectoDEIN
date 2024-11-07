@@ -30,8 +30,16 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Optional;
 
+/**
+ * El controlador principal de la aplicación, que maneja la lógica y las interacciones de la interfaz de usuario.
+ * Este controlador está asociado con la pantalla principal de la aplicación de las Olimpiadas.
+ * Se encarga de gestionar las diferentes acciones de los menús y de interactuar con las tablas de la interfaz.
+ */
 public class PantallaPrincipalController {
 
+    /**
+     * Elementos de menú para agregar nuevas entidades a la base de datos.
+     */
     @FXML
     private MenuItem miAniadirDeporte;
 
@@ -50,6 +58,9 @@ public class PantallaPrincipalController {
     @FXML
     private MenuItem miAniadirParticipacion;
 
+    /**
+     * Elementos de menú para eliminar entidades existentes de la base de datos.
+     */
     @FXML
     private MenuItem miBorrarDeporte;
 
@@ -68,6 +79,9 @@ public class PantallaPrincipalController {
     @FXML
     private MenuItem miBorrarParticipacion;
 
+    /**
+     * Elementos de menú para editar las entidades existentes en la base de datos.
+     */
     @FXML
     private MenuItem miEditarDeporte;
 
@@ -86,26 +100,55 @@ public class PantallaPrincipalController {
     @FXML
     private MenuItem miEditarParticipacion;
 
+    /**
+     * Tabla que muestra los registros de la base de datos.
+     */
     @FXML
     public TableView tabla;
 
+    /**
+     * Obtiene la instancia de la tabla.
+     *
+     * @return La tabla que se utiliza en la interfaz de usuario.
+     */
     public TableView getTabla() {
         return this.tabla;
     }
 
+    /**
+     * Campo de texto para ingresar el nombre de una entidad (por ejemplo, nombre de un deporte o deportista).
+     */
     @FXML
     private TextField tfNombre;
 
+    /**
+     * ComboBox para seleccionar la tabla que se desea visualizar (Deporte, Deportista, Equipo, etc.).
+     */
     @FXML
     private ComboBox<String> cbTablaElegida;
 
+    /**
+     * El escenario (ventana) de la aplicación. Es usado para gestionar el ciclo de vida de la ventana.
+     */
     private Stage stage;
 
-    // Método para recibir el Stage desde la clase principal
+
+    /**
+     * Metodo para recibir el escenario (Stage) desde la clase principal.
+     * Este metodo es utilizado para configurar la ventana principal desde fuera de este controlador.
+     *
+     * @param stage El escenario (ventana) que se va a asociar con este controlador.
+     */
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
+    /**
+     * Metodo que se ejecuta al inicializar la pantalla principal.
+     * Se configuran las opciones del ComboBox para seleccionar qué tabla mostrar,
+     * y se llaman a métodos para generar deportes, configurar el comportamiento del doble clic en la tabla
+     * y gestionar el evento de la tecla Escape.
+     */
     @FXML
     public void initialize() {
         ObservableList<String> tablas = FXCollections.observableArrayList(
@@ -118,7 +161,10 @@ public class PantallaPrincipalController {
         configurarEscapeTecla();
     }
 
-
+    /**
+     * Configura el comportamiento de la tabla para detectar un doble clic en las filas.
+     * Cuando un usuario realiza un doble clic en una fila, se llama al metodo adecuado para editar el objeto seleccionado.
+     */
     private void configurarDobleClicTabla() {
         tabla.setRowFactory(tv -> {
             TableRow<Object> fila = new TableRow<>();
@@ -132,6 +178,13 @@ public class PantallaPrincipalController {
         });
     }
 
+    /**
+     * Maneja la acción de editar un objeto cuando se hace doble clic en él.
+     * Dependiendo del tipo de objeto seleccionado (Deporte, Deportista, Evento, etc.),
+     * se llama al metodo correspondiente para editarlo.
+     *
+     * @param objeto El objeto que se seleccionó para editar.
+     */
     private void manejarDobleClic(Object objeto) {
         if (objeto instanceof Deporte) {
             editarDeporte(null);
@@ -150,6 +203,10 @@ public class PantallaPrincipalController {
         }
     }
 
+    /**
+     * Configura el comportamiento cuando se presiona la tecla Escape en la tabla.
+     * Si hay un objeto seleccionado en la tabla, se llama al metodo correspondiente para eliminarlo.
+     */
     private void configurarEscapeTecla() {
         tabla.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE && tabla.getSelectionModel().getSelectedItem() != null) {
@@ -159,7 +216,13 @@ public class PantallaPrincipalController {
         });
     }
 
-    // Método para manejar la eliminación del objeto seleccionado
+    /**
+     * Maneja la eliminación del objeto seleccionado en la tabla.
+     * Dependiendo del tipo de objeto seleccionado (Deporte, Deportista, Evento, etc.),
+     * se llama al metodo correspondiente para eliminarlo.
+     *
+     * @param objeto El objeto que se desea eliminar.
+     */
     private void manejarEliminar(Object objeto) {
         if (objeto instanceof Deporte) {
             borrarDeporte(null);
@@ -178,6 +241,12 @@ public class PantallaPrincipalController {
         }
     }
 
+    /**
+     * Muestra un mensaje de error en una ventana emergente (Alert).
+     * Este metodo se usa para mostrar un mensaje cuando ocurre un error en el sistema.
+     *
+     * @param mensaje El mensaje de error que se va a mostrar al usuario.
+     */
     private void showError(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -186,7 +255,13 @@ public class PantallaPrincipalController {
         alert.showAndWait();
     }
 
-    // Método que abre la ventana de deportes (en el controlador principal)
+
+    /**
+     * Abre una ventana modal para agregar un nuevo Deporte.
+     * Este metodo carga el FXML de la ventana para agregar un deporte y configura la interacción con el controlador de esa ventana.
+     *
+     * @throws IOException Si ocurre un error al cargar el archivo FXML.
+     */
     @FXML
     public void aniadirDeporte() {
         try {
@@ -207,12 +282,18 @@ public class PantallaPrincipalController {
             stage.setTitle("Agregar Deporte");
             stage.showAndWait();
             cambiarDeTabla(null);
-            //System.out.println("HEY AQUI ESTOY");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Abre una ventana modal para agregar un nuevo Deportista.
+     * Este metodo carga el FXML de la ventana para agregar un deportista y configura la interacción con el controlador de esa ventana.
+     *
+     * @param event El evento generado al hacer clic en el botón para agregar un deportista.
+     * @throws IOException Si ocurre un error al cargar el archivo FXML.
+     */
     @FXML
     void aniadirDeportista(ActionEvent event) {
         try {
@@ -241,7 +322,13 @@ public class PantallaPrincipalController {
         }
     }
 
-
+    /**
+     * Abre una ventana modal para agregar un nuevo Equipo.
+     * Este metodo carga el FXML de la ventana para agregar un equipo y configura la interacción con el controlador de esa ventana.
+     *
+     * @param event El evento generado al hacer clic en el botón para agregar un equipo.
+     * @throws IOException Si ocurre un error al cargar el archivo FXML.
+     */
     @FXML
     void aniadirEquipo(ActionEvent event) {
         try {
@@ -270,7 +357,13 @@ public class PantallaPrincipalController {
         }
     }
 
-
+    /**
+     * Abre una ventana modal para agregar un nuevo Evento.
+     * Este metodo carga el FXML de la ventana para agregar un evento y configura la interacción con el controlador de esa ventana.
+     *
+     * @param event El evento generado al hacer clic en el botón para agregar un evento.
+     * @throws IOException Si ocurre un error al cargar el archivo FXML.
+     */
     @FXML
     void aniadirEvento(ActionEvent event) {
         try {
@@ -299,7 +392,13 @@ public class PantallaPrincipalController {
         }
     }
 
-
+    /**
+     * Abre una ventana modal para agregar una nueva Olimpiada.
+     * Este metodo carga el FXML de la ventana para agregar una olimpiada y configura la interacción con el controlador de esa ventana.
+     *
+     * @param event El evento generado al hacer clic en el botón para agregar una olimpiada.
+     * @throws IOException Si ocurre un error al cargar el archivo FXML.
+     */
     @FXML
     void aniadirOlimpiada(ActionEvent event) {
         try {
@@ -328,7 +427,13 @@ public class PantallaPrincipalController {
         }
     }
 
-
+    /**
+     * Abre una ventana modal para agregar una nueva Participación.
+     * Este metodo carga el FXML de la ventana para agregar una participación y configura la interacción con el controlador de esa ventana.
+     *
+     * @param event El evento generado al hacer clic en el botón para agregar una participación.
+     * @throws IOException Si ocurre un error al cargar el archivo FXML.
+     */
     @FXML
     void aniadirParticipacion(ActionEvent event) {
         try {
@@ -358,6 +463,15 @@ public class PantallaPrincipalController {
     }
 
 
+
+    /**
+     * Elimina un deporte seleccionado de la tabla después de confirmar la acción con el usuario.
+     * Si se selecciona un deporte en la tabla y el usuario confirma la eliminación, el deporte será eliminado.
+     * Después de la eliminación, la tabla se actualizará y se mostrará un mensaje de éxito o error según corresponda.
+     * Si no se selecciona ningún deporte, se mostrará una advertencia.
+     *
+     * @param event El evento generado al hacer clic en el botón para eliminar un deporte.
+     */
     @FXML
     void borrarDeporte(ActionEvent event) {
         if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Deporte")) {
@@ -400,11 +514,19 @@ public class PantallaPrincipalController {
             Alert warningAlert = new Alert(Alert.AlertType.WARNING);
             warningAlert.setTitle("Advertencia");
             warningAlert.setHeaderText(null);
-            warningAlert.setContentText("Por favor, selecciona un objeto deporte");
+            warningAlert.setContentText("Por favor, selecciona un objeto deporte.");
             warningAlert.showAndWait();
         }
     }
 
+    /**
+     * Elimina un deportista seleccionado de la tabla después de confirmar la acción con el usuario.
+     * Si se selecciona un deportista en la tabla y el usuario confirma la eliminación, el deportista será eliminado.
+     * Después de la eliminación, la tabla se actualizará y se mostrará un mensaje de éxito o error según corresponda.
+     * Si no se selecciona ningún deportista, se mostrará una advertencia.
+     *
+     * @param event El evento generado al hacer clic en el botón para eliminar un deportista.
+     */
     @FXML
     void borrarDeportista(ActionEvent event) {
         if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Deportistas")) { // Verificar que la selección sea "Deportistas"
@@ -452,7 +574,14 @@ public class PantallaPrincipalController {
         }
     }
 
-
+    /**
+     * Elimina un equipo seleccionado de la tabla después de confirmar la acción con el usuario.
+     * Si se selecciona un equipo en la tabla y el usuario confirma la eliminación, el equipo será eliminado.
+     * Después de la eliminación, la tabla se actualizará y se mostrará un mensaje de éxito o error según corresponda.
+     * Si no se selecciona ningún equipo, se mostrará una advertencia.
+     *
+     * @param event El evento generado al hacer clic en el botón para eliminar un equipo.
+     */
     @FXML
     void borrarEquipo(ActionEvent event) {
         if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Equipos")) {
@@ -501,6 +630,15 @@ public class PantallaPrincipalController {
     }
 
 
+
+    /**
+     * Elimina un evento seleccionado de la tabla después de confirmar la acción con el usuario.
+     * Si se selecciona un evento en la tabla y el usuario confirma la eliminación, el evento será eliminado.
+     * Después de la eliminación, la tabla se actualizará y se mostrará un mensaje de éxito o error según corresponda.
+     * Si no se selecciona ningún evento, se mostrará una advertencia.
+     *
+     * @param event El evento generado al hacer clic en el botón para eliminar un evento.
+     */
     @FXML
     void borrarEvento(ActionEvent event) {
         if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Eventos")) {
@@ -548,7 +686,14 @@ public class PantallaPrincipalController {
         }
     }
 
-
+    /**
+     * Elimina una olimpiada seleccionada de la tabla después de confirmar la acción con el usuario.
+     * Si se selecciona una olimpiada en la tabla y el usuario confirma la eliminación, la olimpiada será eliminada.
+     * Después de la eliminación, la tabla se actualizará y se mostrará un mensaje de éxito o error según corresponda.
+     * Si no se selecciona ninguna olimpiada, se mostrará una advertencia.
+     *
+     * @param event El evento generado al hacer clic en el botón para eliminar una olimpiada.
+     */
     @FXML
     void borrarOlimpiada(ActionEvent event) {
         // Verificar que la tabla seleccionada es de Olimpiadas
@@ -600,7 +745,14 @@ public class PantallaPrincipalController {
         }
     }
 
-
+    /**
+     * Elimina una participación seleccionada de la tabla después de confirmar la acción con el usuario.
+     * Si se selecciona una participación en la tabla y el usuario confirma la eliminación, la participación será eliminada.
+     * Después de la eliminación, la tabla se actualizará y se mostrará un mensaje de éxito o error según corresponda.
+     * Si no se selecciona ninguna participación, se mostrará una advertencia.
+     *
+     * @param event El evento generado al hacer clic en el botón para eliminar una participación.
+     */
     @FXML
     void borrarParticipacion(ActionEvent event) {
         if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Participaciones")) {
@@ -652,6 +804,15 @@ public class PantallaPrincipalController {
     }
 
 
+
+    /**
+     * Abre una ventana modal para editar un deporte seleccionado de la tabla.
+     * Si un deporte es seleccionado y el usuario confirma la acción, se abre una nueva ventana de edición.
+     * Después de la edición, la tabla se actualiza con los nuevos datos.
+     * Si no se selecciona ningún deporte, se muestra una advertencia.
+     *
+     * @param event El evento generado al hacer clic en el botón para editar un deporte.
+     */
     @FXML
     void editarDeporte(ActionEvent event) {
         // Obtener el deporte seleccionado de la tabla
@@ -692,7 +853,7 @@ public class PantallaPrincipalController {
                 alert.showAndWait();
             }
 
-        }else {
+        } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Advertencia");
             alert.setHeaderText(null);
@@ -702,7 +863,14 @@ public class PantallaPrincipalController {
 
     }
 
-
+    /**
+     * Abre una ventana modal para editar un deportista seleccionado de la tabla.
+     * Si un deportista es seleccionado y el usuario confirma la acción, se abre una nueva ventana de edición.
+     * Después de la edición, la tabla se actualiza con los nuevos datos.
+     * Si no se selecciona ningún deportista, se muestra una advertencia.
+     *
+     * @param event El evento generado al hacer clic en el botón para editar un deportista.
+     */
     @FXML
     void editarDeportista(ActionEvent event) {
         // Verificar que la tabla seleccionada es de Deportistas
@@ -751,7 +919,14 @@ public class PantallaPrincipalController {
         }
     }
 
-
+    /**
+     * Abre una ventana modal para editar un equipo seleccionado de la tabla.
+     * Si un equipo es seleccionado y el usuario confirma la acción, se abre una nueva ventana de edición.
+     * Después de la edición, la tabla se actualiza con los nuevos datos.
+     * Si no se selecciona ningún equipo, se muestra una advertencia.
+     *
+     * @param event El evento generado al hacer clic en el botón para editar un equipo.
+     */
     @FXML
     void editarEquipo(ActionEvent event) {
         // Verificar que la tabla seleccionada es de Equipos
@@ -802,6 +977,15 @@ public class PantallaPrincipalController {
     }
 
 
+
+    /**
+     * Abre una ventana modal para editar un evento seleccionado de la tabla.
+     * Si un evento es seleccionado y el usuario confirma la edición, se abrirá una nueva ventana de edición.
+     * Después de la edición, la tabla se actualizará con los nuevos datos.
+     * Si no se selecciona ningún evento o si la tabla no es la correcta, se muestra una advertencia.
+     *
+     * @param event El evento generado al hacer clic en el botón para editar un evento.
+     */
     @FXML
     void editarEvento(ActionEvent event) {
         // Verificar que la tabla seleccionada es de Eventos
@@ -851,7 +1035,14 @@ public class PantallaPrincipalController {
         }
     }
 
-
+    /**
+     * Abre una ventana modal para editar una olimpiada seleccionada de la tabla.
+     * Si una olimpiada es seleccionada y el usuario confirma la edición, se abrirá una nueva ventana de edición.
+     * Después de la edición, la tabla se actualizará con los nuevos datos.
+     * Si no se selecciona ninguna olimpiada o si la tabla no es la correcta, se muestra una advertencia.
+     *
+     * @param event El evento generado al hacer clic en el botón para editar una olimpiada.
+     */
     @FXML
     void editarOlimpiada(ActionEvent event) {
         // Verificar que la tabla seleccionada es de Olimpiadas
@@ -902,7 +1093,14 @@ public class PantallaPrincipalController {
         }
     }
 
-
+    /**
+     * Abre una ventana modal para editar una participación seleccionada de la tabla.
+     * Si una participación es seleccionada y el usuario confirma la edición, se abrirá una nueva ventana de edición.
+     * Después de la edición, la tabla se actualizará con los nuevos datos.
+     * Si no se selecciona ninguna participación o si la tabla no es la correcta, se muestra una advertencia.
+     *
+     * @param event El evento generado al hacer clic en el botón para editar una participación.
+     */
     @FXML
     void editarParticipacion(ActionEvent event) {
         // Verificar que la tabla seleccionada es de Participaciones
@@ -953,6 +1151,15 @@ public class PantallaPrincipalController {
     }
 
 
+
+    /**
+     * Filtra los elementos de la tabla basada en el texto ingresado en el campo de búsqueda.
+     * Dependiendo de la tabla seleccionada en el comboBox, se filtran los datos de la lista correspondiente
+     * (Deportistas, Deportes, Equipos, Olimpiadas, Eventos o Participaciones) utilizando el texto ingresado.
+     * El filtro es sensible a mayúsculas y minúsculas.
+     *
+     * @param event El evento generado por la escritura en el campo de búsqueda.
+     */
     @FXML
     void filtrar(KeyEvent event) {
         String textoBusqueda = tfNombre.getText() != null ? tfNombre.getText().toLowerCase() : ""; // Asegúrate de que el texto no sea null
@@ -991,6 +1198,15 @@ public class PantallaPrincipalController {
     }
 
 
+
+    /**
+     * Cambia la vista de la tabla de acuerdo con la opción seleccionada en el comboBox.
+     * Dependiendo de la opción seleccionada en `cbTablaElegida`, se invoca un metodo diferente
+     * para generar la tabla correspondiente, ya sea para Deportistas, Deportes, Equipos,
+     * Olimpiadas, Eventos o Participaciones.
+     *
+     * @param event El evento generado por la acción de cambiar la selección en el comboBox.
+     */
     @FXML
     void cambiarDeTabla(ActionEvent event) {
         if (cbTablaElegida.getSelectionModel().getSelectedItem().equals("Deporte")) {
@@ -1008,8 +1224,15 @@ public class PantallaPrincipalController {
         }
     }
 
+
+    /**
+     * Genera la tabla para mostrar los deportes. Crea las columnas necesarias para mostrar
+     * la información de los deportes y carga los datos desde la base de datos utilizando
+     * el `DeporteDAO`. Limpia cualquier filtro o campo de búsqueda y refresca la tabla
+     * con los datos de los deportes.
+     */
     @FXML
-    void generarDeportes()  {
+    void generarDeportes() {
         // Limpiar columnas y filtro
         tfNombre.setText(null);
         tabla.getColumns().clear();
@@ -1029,6 +1252,15 @@ public class PantallaPrincipalController {
         tabla.setItems(deportes);
     }
 
+
+    /**
+     * Genera la tabla para mostrar los deportistas. Crea las columnas necesarias para mostrar
+     * la información de los deportistas, incluidos sus datos como ID, nombre, sexo, peso, altura
+     * y foto. Además, configura un `cellFactory` para mostrar las fotos como imágenes en la tabla.
+     *
+     * Limpia cualquier filtro o campo de búsqueda y refresca la tabla con los datos de los deportistas
+     * obtenidos desde el `DeportistaDAO`.
+     */
     @FXML
     void generarDeportistas() {
         // Limpiar columnas y filtro
@@ -1097,10 +1329,18 @@ public class PantallaPrincipalController {
         tabla.getColumns().addAll(colIdDeportista, colNombre, colSexo, colPeso, colAltura, colFoto);
 
         // Cargar los datos en la tabla
-            ObservableList<Deportista> deportistas = DeportistaDAO.findAll();
+        ObservableList<Deportista> deportistas = DeportistaDAO.findAll();
         tabla.setItems(deportistas);
     }
 
+
+    /**
+     * Genera la tabla para mostrar los equipos. Crea las columnas necesarias para mostrar
+     * la información de los equipos, incluidos sus datos como ID, nombre e iniciales.
+     *
+     * Limpia cualquier filtro o campo de búsqueda y refresca la tabla con los datos de los equipos
+     * obtenidos desde el `EquipoDAO`.
+     */
     @FXML
     void generarEquipos() {
         // Limpiar columnas y filtro
@@ -1125,6 +1365,14 @@ public class PantallaPrincipalController {
         tabla.setItems(equipos);
     }
 
+
+    /**
+     * Genera la tabla para mostrar los eventos. Crea las columnas necesarias para mostrar
+     * la información de los eventos, incluidos sus datos como ID, nombre, olimpiada y deporte.
+     *
+     * Limpia cualquier filtro o campo de búsqueda y refresca la tabla con los datos de los eventos
+     * obtenidos desde el `EventoDAO`.
+     */
     @FXML
     void generarEventos() {
         // Limpiar columnas y filtro
@@ -1154,11 +1402,19 @@ public class PantallaPrincipalController {
         tabla.getColumns().addAll(colIdEvento, colNombre, colOlimpiada, colDeporte);
 
         // Cargar los datos en la tabla
-            ObservableList<Evento> eventos = EventoDAO.getAll();
-
+        ObservableList<Evento> eventos = EventoDAO.getAll();
         tabla.setItems(eventos);
     }
 
+
+    /**
+     * Genera la tabla para mostrar las olimpiadas. Crea las columnas necesarias para mostrar
+     * la información de las olimpiadas, incluidos sus datos como ID, nombre, año, temporada
+     * y ciudad.
+     *
+     * Limpia cualquier filtro o campo de búsqueda y refresca la tabla con los datos de las olimpiadas
+     * obtenidos desde el `OlimpiadaDAO`.
+     */
     @FXML
     void generarOlimpiadas()  {
         // Limpiar columnas y filtro
@@ -1185,11 +1441,20 @@ public class PantallaPrincipalController {
         tabla.getColumns().addAll(colIdOlimpiada, colNombre, colAnio, colTemporada, colCiudad);
 
         // Cargar los datos en la tabla
-            ObservableList<Olimpiada> olimpiadas = OlimpiadaDAO.getAll();
+        ObservableList<Olimpiada> olimpiadas = OlimpiadaDAO.getAll();
 
         tabla.setItems(olimpiadas);
     }
 
+
+    /**
+     * Genera la tabla para mostrar las participaciones. Crea las columnas necesarias para mostrar
+     * la información de las participaciones, incluidos los datos como deportista, evento, equipo,
+     * edad y medalla obtenida.
+     *
+     * Limpia cualquier filtro o campo de búsqueda y refresca la tabla con los datos de las participaciones
+     * obtenidos desde el `ParticipacionDAO`.
+     */
     @FXML
     void generarParticipaciones()  {
         // Limpiar columnas y filtro
@@ -1228,5 +1493,6 @@ public class PantallaPrincipalController {
         ObservableList<Participacion> participaciones = ParticipacionDAO.findAll();
         tabla.setItems(participaciones);
     }
+
 
 }
