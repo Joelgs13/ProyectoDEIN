@@ -113,6 +113,7 @@ public class DeportistaController {
             Deportista nuevoDeportista = new Deportista(0, nombre, genero == Deportista.Genero.FEMALE ? 'F' : 'M', peso, altura, foto);
             boolean exito = DeportistaDAO.addDeportista(nuevoDeportista);
             if (exito) {
+                showSuccess("Deportista agregado correctamente.");
                 stage.close();
             } else {
                 showError("No se pudo agregar el deportista.");
@@ -144,6 +145,7 @@ public class DeportistaController {
             if (cambios) {
                 boolean exito = DeportistaDAO.updateDeportista(deportista);
                 if (exito) {
+                    showSuccess("Deportista actualizado correctamente.");
                     stage.close();
                 } else {
                     showError("No se pudo actualizar el deportista.");
@@ -174,6 +176,14 @@ public class DeportistaController {
     private void showError(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
+    private void showSuccess(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Éxito");
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();

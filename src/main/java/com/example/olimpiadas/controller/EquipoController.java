@@ -19,7 +19,6 @@ public class EquipoController {
     private Stage stage;
     private Equipo equipo;
 
-
     public void setEquipo(Equipo equipo) {
         this.equipo = equipo;
 
@@ -32,13 +31,11 @@ public class EquipoController {
         }
     }
 
-
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
     private void showError(String mensaje) {
-        // Mostrar error al usuario (se puede personalizar)
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
@@ -46,7 +43,14 @@ public class EquipoController {
         alert.showAndWait();
     }
 
-    // Método para manejar el evento de cancelar
+    private void showSuccess(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Éxito");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
     @FXML
     void cancelar(ActionEvent event) {
         if (stage != null) {
@@ -75,6 +79,7 @@ public class EquipoController {
             Equipo nuevoEquipo = new Equipo(0, nombre, iniciales);
             boolean exito = EquipoDAO.addEquipo(nuevoEquipo); // Usamos el DAO para agregar el equipo
             if (exito) {
+                showSuccess("Equipo agregado correctamente.");
                 stage.close();
             } else {
                 showError("No se pudo agregar el equipo.");
@@ -99,6 +104,7 @@ public class EquipoController {
             if (cambios) {
                 boolean exito = EquipoDAO.updateEquipo(equipo);
                 if (exito) {
+                    showSuccess("Equipo actualizado correctamente.");
                     stage.close();
                 } else {
                     showError("No se pudo actualizar el equipo.");
@@ -108,6 +114,4 @@ public class EquipoController {
             }
         }
     }
-
-
 }

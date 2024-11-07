@@ -5,12 +5,8 @@ import com.example.olimpiadas.DAO.DeporteDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
-import java.time.zone.ZoneRulesProvider;
 
 public class DeporteController {
 
@@ -20,7 +16,7 @@ public class DeporteController {
     private Stage stage;
     private Deporte deporte;
 
-    // Método para establecer el deporte a editar (en caso de que sea edición).
+    // Metodo para establecer el deporte a editar (en caso de que sea edición).
     public void setDeporte(Deporte deporte) {
         this.deporte = deporte;
         if (deporte != null) {
@@ -28,7 +24,7 @@ public class DeporteController {
         }
     }
 
-    // Método para establecer el Stage (si es necesario para cerrar el modal desde este controlador).
+    // Metodo para establecer el Stage (si es necesario para cerrar el modal desde este controlador).
     public void setStage(Stage stage) {
         this.stage = stage;
     }
@@ -45,9 +41,10 @@ public class DeporteController {
 
         if (deporte == null) {
             // Si el deporte es null, significa que es una inserción (nuevo deporte)
-            Deporte nuevoDeporte = new Deporte(0,nombre);
+            Deporte nuevoDeporte = new Deporte(0, nombre);
             boolean exito = DeporteDAO.addDeporte(nuevoDeporte); // Usamos el DAO para agregar el deporte
             if (exito) {
+                showConfirmation("El deporte ha sido añadido exitosamente.");
                 stage.close();
             } else {
                 showError("No se pudo agregar el deporte.");
@@ -62,6 +59,7 @@ public class DeporteController {
             deporte.setNombre(nombre);
             boolean exito = DeporteDAO.updateDeporte(deporte);
             if (exito) {
+                showConfirmation("El deporte ha sido actualizado exitosamente.");
                 stage.close();
             } else {
                 showError("No se pudo actualizar el deporte.");
@@ -70,9 +68,18 @@ public class DeporteController {
     }
 
     private void showError(String mensaje) {
-        // Mostrar error al usuario (se puede personalizar)
+        // Mostrar error al usuario
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
+    private void showConfirmation(String mensaje) {
+        // Mostrar confirmación al usuario
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Confirmación");
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
@@ -85,5 +92,5 @@ public class DeporteController {
             stage.close();  // Cierra la ventana modal
         }
     }
-
 }
+

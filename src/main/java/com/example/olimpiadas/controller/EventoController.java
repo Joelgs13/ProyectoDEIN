@@ -29,27 +29,23 @@ public class EventoController {
     private Stage stage;
     private Evento evento;
 
-    // Metodo para establecer el evento a editar (en caso de que sea edición)
     public void setEvento(Evento evento) {
         this.evento = evento;
         if (evento != null) {
-            tfNombre.setText(evento.getNombre()); // Llenar el campo con el nombre del evento
-            cbOlimpiada.setValue(evento.getOlimpiada()); // Llenar el ComboBox de Olimpiada
-            cbDeporte.setValue(evento.getDeporte()); // Llenar el ComboBox de Deporte
+            tfNombre.setText(evento.getNombre());
+            cbOlimpiada.setValue(evento.getOlimpiada());
+            cbDeporte.setValue(evento.getDeporte());
         }
     }
 
-    // Metodo para establecer el Stage (si es necesario para cerrar el modal desde este controlador)
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
-    // Metodo para cargar los datos en los ComboBox
     public void cargarDatos() {
-        List<Deporte> listaDeportes = DeporteDAO.findAll(); // Metodo que obtiene todos los deportes
-        List<Olimpiada> listaOlimpiadas = OlimpiadaDAO.getAll(); // Metodo que obtiene todas las olimpiadas
+        List<Deporte> listaDeportes = DeporteDAO.findAll();
+        List<Olimpiada> listaOlimpiadas = OlimpiadaDAO.getAll();
 
-        // Llenar los ComboBox con los datos obtenidos
         cbDeporte.getItems().clear();
         cbDeporte.getItems().addAll(listaDeportes);
 
@@ -63,7 +59,6 @@ public class EventoController {
         Olimpiada olimpiada = cbOlimpiada.getValue();
         Deporte deporte = cbDeporte.getValue();
 
-        // Validar que los campos no estén vacíos
         if (nombre.isEmpty()) {
             showError("El nombre del evento no puede estar vacío.");
             return;
@@ -78,26 +73,27 @@ public class EventoController {
         }
 
         if (evento == null) {
-            // Si el evento es null, significa que es una inserción (nuevo evento)
+            // Inserción de nuevo evento
             Evento nuevoEvento = new Evento(0, nombre, olimpiada, deporte);
-            boolean exito = EventoDAO.addEvento(nuevoEvento); // Usamos el DAO para agregar el evento
+            boolean exito = EventoDAO.addEvento(nuevoEvento);
             if (exito) {
+                showSuccess("Evento agregado correctamente.");
                 stage.close();
             } else {
                 showError("No se pudo agregar el evento.");
             }
         } else {
-            // Si hay un evento, es una edición (actualizar evento)
+            // Edición de evento existente
             if (evento.getNombre().equals(nombre) && evento.getOlimpiada().equals(olimpiada) && evento.getDeporte().equals(deporte)) {
                 showError("No se han realizado cambios en el evento.");
-                return; // No realizamos la actualización si no hay cambios.
+                return;
             }
-            // Si los datos han cambiado, procedemos con la actualización
             evento.setNombre(nombre);
             evento.setOlimpiada(olimpiada);
             evento.setDeporte(deporte);
             boolean exito = EventoDAO.updateEvento(evento);
             if (exito) {
+                showSuccess("Evento actualizado correctamente.");
                 stage.close();
             } else {
                 showError("No se pudo actualizar el evento.");
@@ -106,7 +102,6 @@ public class EventoController {
     }
 
     private void showError(String mensaje) {
-        // Mostrar error al usuario (se puede personalizar)
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
@@ -114,17 +109,23 @@ public class EventoController {
         alert.showAndWait();
     }
 
-    // Metodo para manejar el evento de cancelar
+    private void showSuccess(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Éxito");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
     @FXML
     void cancelar(ActionEvent event) {
         if (stage != null) {
-            stage.close();  // Cierra la ventana modal
+            stage.close();
         }
     }
 
-    // Metodo que se ejecuta cuando se muestra el controlador
     @FXML
     public void initialize() {
-        cargarDatos(); // Cargar los deportes y olimpiadas al iniciar el controlador
+        cargarDatos();
     }
 }

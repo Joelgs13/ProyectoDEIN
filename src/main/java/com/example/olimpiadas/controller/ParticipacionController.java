@@ -39,7 +39,7 @@ public class ParticipacionController {
 
     @FXML
     public void initialize() {
-        cargarDatos(); // Cargar los deportes y olimpiadas al iniciar el controlador
+        cargarDatos();
     }
 
     public void setStage(Stage stage) {
@@ -49,23 +49,15 @@ public class ParticipacionController {
     public void setParticipacion(Participacion participacion) {
         this.participacion = participacion;
         if (participacion != null) {
-            // Asegurarse de que los items de ComboBox estén actualizados
             cargarDatos();
-
-            // Deshabilitar los ComboBox de Evento y Deportista para edición
             cbDeportista.setDisable(true);
             cbEvento.setDisable(true);
-
-            // Seleccionar los valores en el ComboBox usando los objetos de la participación
             cbDeportista.getSelectionModel().select(participacion.getDeportista());
             cbEquipo.getSelectionModel().select(participacion.getEquipo());
             cbEvento.getSelectionModel().select(participacion.getEvento());
-
-            // Asignar los valores de edad y medalla
             tfEdad.setText(String.valueOf(participacion.getEdad()));
             tfMedalla.setText(participacion.getMedalla());
         } else {
-            // Si es una nueva Participacion, habilitar los ComboBox de Evento y Deportista
             cbDeportista.setDisable(false);
             cbEvento.setDisable(false);
         }
@@ -95,7 +87,6 @@ public class ParticipacionController {
 
     @FXML
     void guardar(ActionEvent event) {
-        // Obtener y validar los datos de los campos
         Deportista deportista = cbDeportista.getValue();
         Evento evento = cbEvento.getValue();
         Equipo equipo = cbEquipo.getValue();
@@ -136,6 +127,7 @@ public class ParticipacionController {
             boolean exito = ParticipacionDAO.addParticipacion(nuevaParticipacion);
 
             if (exito) {
+                showSuccess("Participación agregada correctamente.");
                 stage.close();
             } else {
                 showError("No se pudo agregar la participación.");
@@ -158,6 +150,7 @@ public class ParticipacionController {
 
             boolean exito = ParticipacionDAO.updateParticipacion(participacion);
             if (exito) {
+                showSuccess("Participación actualizada correctamente.");
                 stage.close();
             } else {
                 showError("No se pudo actualizar la participación.");
@@ -173,4 +166,11 @@ public class ParticipacionController {
         alert.showAndWait();
     }
 
+    private void showSuccess(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Éxito");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
 }
